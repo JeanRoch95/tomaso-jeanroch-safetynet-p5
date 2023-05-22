@@ -2,15 +2,13 @@ package com.openclassrooms.safetynetp5;
 
 import com.openclassrooms.safetynetp5.model.Data;
 import com.openclassrooms.safetynetp5.model.Person;
-import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@Component
 public class DataMock {
 
-    public Data getDataMock() {
+    public static Data getDataMock() {
         Data dataMock = new Data();
         List<Person> mockPersons = new ArrayList<>();
 
@@ -25,6 +23,5 @@ public class DataMock {
         dataMock.setPersons(mockPersons);
 
         return dataMock;
-
     }
 }

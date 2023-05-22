@@ -61,7 +61,7 @@ public class PersonControllerTest {
     @DisplayName("Testing endpoint add")
     public void testAddingPerson()throws Exception {
 
-        when(personService.save(any(Person.class))).thenReturn(person);
+        when(personService.createPerson(any(Person.class))).thenReturn(person);
 
         mockMvc.perform(post("/person")
                 .content(asJsonString(person))
@@ -76,7 +76,7 @@ public class PersonControllerTest {
 
         List<Person> mockResponse = Arrays.asList(person, person);
 
-        when(personService.delete(any(String.class), any(String.class))).thenReturn(mockResponse);
+        when(personService.deletePerson(any(String.class), any(String.class))).thenReturn(mockResponse);
 
         mockMvc.perform(delete("/person?firstname=" + firstNameTest + "&lastname=" + lastNameTest)
                 .content(asJsonString(person))

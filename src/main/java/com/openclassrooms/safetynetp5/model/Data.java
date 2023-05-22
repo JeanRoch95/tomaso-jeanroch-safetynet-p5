@@ -1,9 +1,7 @@
 package com.openclassrooms.safetynetp5.model;
 
-import org.springframework.stereotype.Component;
-
 import java.util.List;
-@Component
+
 public class Data {
 
     private List<Person> persons;
@@ -15,4 +13,5 @@ public class Data {
     public void setPersons(List<Person> persons) {
         this.persons = persons;
     }
+
 }

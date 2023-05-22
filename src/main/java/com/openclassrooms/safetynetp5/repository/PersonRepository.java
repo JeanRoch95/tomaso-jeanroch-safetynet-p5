@@ -7,12 +7,12 @@ import java.util.List;
 @Repository
 public interface PersonRepository {
 
-    List<Person> getAllPersons();
+    List<Person> getAll();
 
-    Person createPerson(Person person);
+    Person save(Person person);
 
-    List<Person> deletePerson(String firstName, String lastName);
+    List<Person> delete(String firstName, String lastName);
 
-    Person updatePerson(Person person, String firstname, String lastname);
+    Person update(Person person, String firstname, String lastname);
 
 }

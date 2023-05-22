@@ -2,7 +2,6 @@ package com.openclassrooms.safetynetp5.service;
 
 import com.openclassrooms.safetynetp5.model.Person;
 import com.openclassrooms.safetynetp5.repository.PersonRepository;
-import com.openclassrooms.safetynetp5.repository.PersonRepositoryImpl;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -14,20 +13,20 @@ public class PersonServiceImpl implements PersonService {
     private PersonRepository personRepository;
 
     @Override
-    public List<Person> read() {
-        return personRepository.getAllPersons();
+    public List<Person> getAllPersons() {
+        return personRepository.getAll();
     }
 
     @Override
-    public Person save(Person person) {
-        return personRepository.createPerson(person);
+    public Person createPerson(Person person) {
+        return personRepository.save(person);
     }
     @Override
-    public List<Person> delete(String firstName, String lastName) {
-        return personRepository.deletePerson(firstName, lastName);
+    public List<Person> deletePerson(String firstName, String lastName) {
+        return personRepository.delete(firstName, lastName);
     }
     @Override
     public Person updatePerson(Person person, String firstName, String lastName) {
-        return personRepository.updatePerson(person, firstName, lastName);
+        return personRepository.update(person, firstName, lastName);
     }
 }

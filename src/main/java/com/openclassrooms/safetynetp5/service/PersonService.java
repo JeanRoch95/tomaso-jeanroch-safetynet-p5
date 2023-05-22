@@ -7,11 +7,11 @@ import java .util.List;
 @Service
 public interface PersonService {
 
-    List<Person> read();
+    List<Person> getAllPersons();
 
-    Person save(Person person);
+    Person createPerson(Person person);
 
-    List<Person> delete(String firstName, String lastName);
+    List<Person> deletePerson(String firstName, String lastName);
 
     Person updatePerson(Person person, String firstName, String lastName);
 }

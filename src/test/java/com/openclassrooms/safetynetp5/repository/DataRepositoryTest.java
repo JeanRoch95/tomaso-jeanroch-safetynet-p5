@@ -1,40 +1,23 @@
 package com.openclassrooms.safetynetp5.repository;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.openclassrooms.safetynetp5.repository.DataRepositoryImpl;
-
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.openclassrooms.safetynetp5.model.Data;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.junit.Test;
 
-import java.io.File;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-@SpringBootTest
 public class DataRepositoryTest {
 
-    @Autowired
-    private DataRepository dataRepository;
-    @Mock
-    private ObjectMapper mapper;
+    private String FILEPATH = "src/test/java/com/openclassrooms/safetynetp5/DataTest.json";
 
     @Test
-    public void testRead() throws Exception {
+    public void testRead() {
+        DataRepository dataRepository = new DataRepositoryImpl();
+        dataRepository.loadData(FILEPATH);
+        Data data = dataRepository.getData();
 
-        Data data;
-        dataRepository = new DataRepositoryImpl(mapper);
+        assertNotNull(data);
+        assertEquals(data.getPersons().size(), 3);
 
-        data = mapper.readValue(new File("src/main/resources/data.json"), Data.class);
-
-        assertEquals(data, dataRepository.getData());
     }
 }

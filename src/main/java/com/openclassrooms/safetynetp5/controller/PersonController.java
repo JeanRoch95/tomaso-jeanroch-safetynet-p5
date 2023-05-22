@@ -5,8 +5,6 @@ import com.openclassrooms.safetynetp5.service.PersonService;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -22,7 +20,7 @@ public class PersonController {
 
     @GetMapping()
     public List<Person> getAllPersons(){
-        List<Person> personList = personService.read();
+        List<Person> personList = personService.getAllPersons();
 
         if(!personList.isEmpty()){
             LOGGER.info("Return List persons");
@@ -34,7 +32,7 @@ public class PersonController {
     }
     @PostMapping()
     public Person createPerson(@RequestBody Person person) {
-        Person createdPerson = personService.save(person);
+        Person createdPerson = personService.createPerson(person);
 
         if(createdPerson != null) {
             LOGGER.info("Person with firstname: {} and lastname: {} successfully created ", createdPerson.getFirstName(), createdPerson.getLastName());
@@ -46,7 +44,7 @@ public class PersonController {
     }
     @DeleteMapping()
     public List<Person> delete(@RequestParam("firstname")String firstName,@RequestParam("lastname")String lastName) {
-        List<Person> removedPersons = personService.delete(firstName, lastName);
+        List<Person> removedPersons = personService.deletePerson(firstName, lastName);
 
        if(!removedPersons.isEmpty()){
             LOGGER.info("Person with firstname: {} and lastname: {} successfully deleted.", firstName, lastName);

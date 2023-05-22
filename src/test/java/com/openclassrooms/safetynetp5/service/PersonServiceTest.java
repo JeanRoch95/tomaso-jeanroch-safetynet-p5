@@ -2,86 +2,83 @@ package com.openclassrooms.safetynetp5.service;
 
 import com.openclassrooms.safetynetp5.model.Person;
 import com.openclassrooms.safetynetp5.repository.PersonRepository;
-import com.openclassrooms.safetynetp5.repository.PersonRepositoryImpl;
+import org.assertj.core.api.JUnitJupiterSoftAssertions;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
-
-@SpringBootTest
-@AutoConfigureMockMvc
+@ExtendWith(MockitoExtension.class)
 public class PersonServiceTest {
     @Mock
     private PersonRepository personRepository;
-    @InjectMocks
-    private PersonServiceImpl personService;
+
+    private PersonService personService;
 
     @BeforeEach
-    public void setUpBeforeEach() {
-        Person p = new Person("firstNameTest", "lastNameTest", "addressTest", "cityTest", "zipTest", "phoneTest", "emailTest");
+    public void setUpBeforeTest() {
+        personService = new PersonServiceImpl(personRepository);
     }
+
     @Test
-    public void test_than_read_return_list()throws Exception {
-        List<Person> testPerson = new ArrayList<>();
-        Person p = new Person("firstNameTest", "lastNameTest", "addressTest", "cityTest", "zipTest", "phoneTest", "emailTest");
+    public void test_than_read_return_list() {
 
-        testPerson.add(p);
 
-        when(personRepository.getAllPersons()).thenReturn(testPerson);
-        personService.read();
+        List<Person> mockPersons = Arrays.asList(new Person(), new Person());
+        when(personRepository.getAll()).thenReturn(mockPersons);
 
-        assertEquals(testPerson.get(0).getFirstName(), "firstNameTest");
-        assertEquals(testPerson.get(0).getLastName(), "lastNameTest");
-        assertEquals(testPerson.get(0).getAddress(), "addressTest");
-        assertEquals(testPerson.get(0).getCity(), "cityTest");
-        assertEquals(testPerson.get(0).getZip(), "zipTest");
-        assertEquals(testPerson.get(0).getPhone(), "phoneTest");
-        assertEquals(testPerson.get(0).getEmail(), "emailTest");
+        List<Person> result = personService.getAllPersons();
+
+        assertEquals(mockPersons, result);
+        verify(personRepository).getAll();
 
     }
     @Test
-    public void test_than_person_is_save()throws Exception {
-        Person p = new Person("firstNameTest", "lastNameTest", "addressTest", "cityTest", "zipTest", "phoneTest", "emailTest");
+    public void test_than_person_is_save() {
+        Person mockPerson = new Person();
+        when(personRepository.save(any(Person.class))).thenReturn(mockPerson);
 
-        personService.save(p);
+        Person result = personService.createPerson(mockPerson);
 
-        verify(personRepository, times(1)).createPerson(p);
-
-    }
-    @Test
-    public void test_than_person_is_delete()throws Exception {
-        List<Person> testPerson = new ArrayList<>();
-        Person p = new Person("firstNameTest", "lastNameTest", "addressTest", "cityTest", "zipTest", "phoneTest", "emailTest");
-
-        testPerson.add(p);
-
-        when(personRepository.deletePerson("firstNameTest", "lastNameTest")).thenReturn(testPerson);
-        List<Person> actualList = personService.delete("firstNameTest", "lastNameTest");
-
-        assertEquals(testPerson.size(), actualList.size());
-        assertEquals(testPerson.get(0).getFirstName(), actualList.get(0).getFirstName());
-        assertEquals(testPerson.get(0).getLastName(), actualList.get(0).getLastName());
+        assertEquals(mockPerson, result);
+        verify(personRepository).save(mockPerson);
 
     }
     @Test
-    public void test_than_person_is_updated()throws Exception {
+    public void test_than_person_is_delete() {
 
-        Person p = new Person("firstNameTest", "lastNameTest", "addressTest", "cityTest", "zipTest", "phoneTest", "emailTest");
+        String firstName = "John";
+        String lastName = "Doe";
+        List<Person> mockPersons = List.of(new Person());
+        when(personRepository.delete(firstName, lastName)).thenReturn(mockPersons);
 
-        when(personRepository.updatePerson(p, "firstNameTest", "lastNameTest")).thenReturn(p);
+        List<Person> result = personService.deletePerson(firstName, lastName);
 
-        Person actualPerson = personService.updatePerson(p, "firstNameTest", "lastNameTest");
+        assertEquals(mockPersons, result);
+        verify(personRepository).delete(firstName, lastName);
 
-        assertEquals(p.getFirstName(), actualPerson.getFirstName());
-        assertEquals(p.getLastName(), actualPerson.getLastName());
+    }
+    @Test
+    public void test_than_person_is_updated() {
+
+        String firstName = "John";
+        String lastName = "Doe";
+        Person mockPerson = new Person();
+        when(personRepository.update(any(Person.class), eq(firstName), eq(lastName))).thenReturn(mockPerson);
+
+        Person result = personService.updatePerson(mockPerson, firstName, lastName);
+
+        assertEquals(mockPerson, result);
+        verify(personRepository).update(mockPerson, firstName, lastName);
     }
 }
