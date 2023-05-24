@@ -8,7 +8,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
@@ -48,6 +47,7 @@ public class PersonRepositoryTest {
         List<Person> listPersons= personRepository.getAll();
 
         assertEquals(4, listPersons.size());
+        assertEquals(listPersons.get(3).getFirstName(), "firstNameTest");
     }
     @Test
     public void testDeletePerson() {
@@ -66,7 +66,5 @@ public class PersonRepositoryTest {
         List<Person> listPersons = personRepository.getAll();
 
         assertEquals("address2", listPersons.get(0).getAddress());
-
-
     }
 }

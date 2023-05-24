@@ -1,9 +1,6 @@
 package com.openclassrooms.safetynetp5.repository;
 
-import com.openclassrooms.safetynetp5.model.Data;
 import com.openclassrooms.safetynetp5.model.Person;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Repository;
 
 import java.util.Iterator;

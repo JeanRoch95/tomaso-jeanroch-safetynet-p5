@@ -2,17 +2,12 @@ package com.openclassrooms.safetynetp5.service;
 
 import com.openclassrooms.safetynetp5.model.Person;
 import com.openclassrooms.safetynetp5.repository.PersonRepository;
-import org.assertj.core.api.JUnitJupiterSoftAssertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -32,7 +27,6 @@ public class PersonServiceTest {
 
     @Test
     public void test_than_read_return_list() {
-
 
         List<Person> mockPersons = Arrays.asList(new Person(), new Person());
         when(personRepository.getAll()).thenReturn(mockPersons);

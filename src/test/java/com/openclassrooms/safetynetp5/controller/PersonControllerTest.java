@@ -52,13 +52,13 @@ public class PersonControllerTest {
         person.setEmail(emailTest);
     }
     @Test
-    @DisplayName("Testing endpoint read")
+    @DisplayName("Testing endpoint Get")
     public void testGetPerson()throws Exception {
         mockMvc.perform(get("/person"))
                 .andExpect(status().isOk());
     }
     @Test
-    @DisplayName("Testing endpoint add")
+    @DisplayName("Testing endpoint post")
     public void testAddingPerson()throws Exception {
 
         when(personService.createPerson(any(Person.class))).thenReturn(person);

@@ -23,7 +23,7 @@ public class PersonController {
         List<Person> personList = personService.getAllPersons();
 
         if(!personList.isEmpty()){
-            LOGGER.info("Return List persons");
+            LOGGER.info("Return List of persons");
             return personList;
         } else {
             LOGGER.error("Failed to get data");
@@ -38,7 +38,7 @@ public class PersonController {
             LOGGER.info("Person with firstname: {} and lastname: {} successfully created ", createdPerson.getFirstName(), createdPerson.getLastName());
             return createdPerson;
         } else {
-            LOGGER.error("Failed while adding person");
+            LOGGER.error("Failed while creating person");
             return null;
         }
     }
