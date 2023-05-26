@@ -19,7 +19,11 @@ import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 @SpringBootTest
@@ -38,18 +42,20 @@ public class MedicalRecordControllerTest {
 
     String lastNameTest = "lastNameTest";
 
-    String birthdate = "birthdate";
+    DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
 
     List<String> medicationsListConst;
 
     List<String> allergiesListConst;
 
     @BeforeEach
-    public void setUpBeforeTest() {
+    public void setUpBeforeTest() throws ParseException {
+        Date birthDay = dateFormat.parse("01/01/2001");
+
         medicalRecord = new MedicalRecord();
         medicalRecord.setFirstName(firstNameTest);
         medicalRecord.setLastName(lastNameTest);
-        medicalRecord.setBirthdate(birthdate);
+        medicalRecord.setBirthdate(birthDay);
         medicalRecord.setMedication(medicationsListConst);
         medicalRecord.setAllergies(allergiesListConst);
     }

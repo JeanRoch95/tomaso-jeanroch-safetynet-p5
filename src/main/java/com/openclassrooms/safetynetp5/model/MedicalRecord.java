@@ -1,7 +1,9 @@
 package com.openclassrooms.safetynetp5.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+import java.util.Date;
 import java.util.List;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -10,8 +12,8 @@ public class MedicalRecord {
     private String firstName;
 
     private String lastName;
-
-    private String birthdate;
+    @JsonFormat(pattern = "dd/MM/YYYY")
+    private Date birthdate;
 
     private List<String> medication;
 
@@ -20,10 +22,14 @@ public class MedicalRecord {
     public MedicalRecord(){
     }
 
-    public MedicalRecord(String firstName, String lastName, String birthdate, List<String> medication, List<String> allergies) {
+    public MedicalRecord(String firstName, String lastName, Date birthdate, List<String> medication, List<String> allergies) {
         this.firstName = firstName;
         this.lastName = lastName;
-        this.birthdate = birthdate;
+        if (birthdate == null) {
+            this.birthdate = null;
+        } else {
+            this.birthdate = new Date(birthdate.getTime());
+        };
         this.medication = medication;
         this.allergies = allergies;
     }
@@ -44,12 +50,17 @@ public class MedicalRecord {
         this.lastName = lastName;
     }
 
-    public String getBirthdate() {
-        return birthdate;
+    public Date getBirthdate() {
+        Date date = birthdate;
+        return date;
     }
 
-    public void setBirthdate(String birthdate) {
-        this.birthdate = birthdate;
+    public void setBirthdate(Date birthdate) {
+        if (birthdate == null) {
+            this.birthdate = null;
+        } else {
+            this.birthdate = new Date(birthdate.getTime());
+        }
     }
 
     public List<String> getMedication() {

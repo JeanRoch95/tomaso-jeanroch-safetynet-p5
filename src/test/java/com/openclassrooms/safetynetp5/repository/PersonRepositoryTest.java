@@ -10,6 +10,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.text.ParseException;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -25,7 +26,7 @@ public class PersonRepositoryTest {
     private PersonRepository personRepository;
 
     @BeforeEach
-    public void setUpBeforeTest() {
+    public void setUpBeforeTest() throws ParseException {
         Data data = DataMock.getDataMock();
         when(dataRepository.getData()).thenReturn(data);
         personRepository = new PersonRepositoryImpl(dataRepository);

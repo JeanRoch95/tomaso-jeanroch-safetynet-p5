@@ -13,6 +13,7 @@ import static org.mockito.Mockito.when;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
+import java.text.ParseException;
 import java.util.List;
 
 @ExtendWith(MockitoExtension.class)
@@ -24,7 +25,7 @@ public class FirestationRepositoryTest {
     private FirestationRepository firestationRepository;
 
     @BeforeEach
-    public void setUpBeforeTest() {
+    public void setUpBeforeTest() throws ParseException {
         Data data = DataMock.getDataMock();
         when(dataRepository.getData()).thenReturn(data);
         firestationRepository = new FirestationRepositoryImpl(dataRepository);

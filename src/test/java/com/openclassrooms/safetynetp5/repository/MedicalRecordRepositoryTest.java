@@ -9,7 +9,11 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import static org.mockito.Mockito.when;
@@ -26,7 +30,7 @@ public class MedicalRecordRepositoryTest {
     private MedicalRecordRepository medicalRecordRepository;
 
     @BeforeEach
-    public void setUpBeforeEachTest() {
+    public void setUpBeforeEachTest() throws ParseException {
         Data data = DataMock.getDataMock();
         when(dataRepository.getData()).thenReturn(data);
         medicalRecordRepository = new MedicalRecordRepositoryImpl(dataRepository);
@@ -41,20 +45,22 @@ public class MedicalRecordRepositoryTest {
     }
 
     @Test
-    public void testCreateMedicalRecord() {
+    public void testCreateMedicalRecord() throws ParseException {
         List<String> mockAllergies = new ArrayList<>();
         List<String> mockMedications = new ArrayList<>();
         mockAllergies.add("allergiesTest");
         mockMedications.add("medicationTest");
+        DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        Date birthDay = dateFormat.parse("01/01/2021");
 
-        MedicalRecord medicalRecordTestCreate = new MedicalRecord("firstNameTest", "lastNameTest", "06091990", mockMedications, mockAllergies);
+        MedicalRecord medicalRecordTestCreate = new MedicalRecord("firstNameTest", "lastNameTest", birthDay , mockMedications, mockAllergies);
 
 
         medicalRecordRepository.save(medicalRecordTestCreate);
         List<MedicalRecord> listMedicalRecord = medicalRecordRepository.getAll();
 
         assertEquals(4, listMedicalRecord.size());
-        assertEquals(listMedicalRecord.get(3).getBirthdate(), "06091990");
+        assertEquals(listMedicalRecord.get(3).getBirthdate(), birthDay);
     }
 
     @Test
@@ -67,18 +73,20 @@ public class MedicalRecordRepositoryTest {
     }
 
     @Test
-    public void testUpdateMedicalRecord() {
+    public void testUpdateMedicalRecord() throws ParseException {
         List<String> mockAllergies = new ArrayList<>();
         List<String> mockMedications = new ArrayList<>();
         mockAllergies.add("allergiesTest");
         mockMedications.add("medicationTest");
+        DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        Date birthDay = dateFormat.parse("01/01/2021");
 
-        MedicalRecord medicalRecordTestUpdate = new MedicalRecord("firstNameTest", "lastNameTest", "06091990", mockMedications, mockAllergies);
+        MedicalRecord medicalRecordTestUpdate = new MedicalRecord("firstNameTest", "lastNameTest", birthDay, mockMedications, mockAllergies);
 
         medicalRecordRepository.update(medicalRecordTestUpdate, "firstNameTest", "lastNameTest");
 
         List<MedicalRecord> medicalRecordList = medicalRecordRepository.getAll();
 
-        assertEquals("06091990", medicalRecordList.get(0).getBirthdate());
+        assertEquals(birthDay, medicalRecordList.get(0).getBirthdate());
     }
 }

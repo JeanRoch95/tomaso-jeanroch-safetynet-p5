@@ -5,12 +5,16 @@ import com.openclassrooms.safetynetp5.model.Firestation;
 import com.openclassrooms.safetynetp5.model.MedicalRecord;
 import com.openclassrooms.safetynetp5.model.Person;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class DataMock {
 
-    public static Data getDataMock() {
+    public static Data getDataMock() throws ParseException {
         Data dataMock = new Data();
         List<Person> mockPersons = new ArrayList<>();
         List<Firestation> mockFirestation = new ArrayList<>();
@@ -44,9 +48,13 @@ public class DataMock {
         mockMedications.add("medicationTest1");
         mockMedications.add("medicationTest2");
 
-        MedicalRecord m = new MedicalRecord("firstNameTest", "lastNameTest", "06091995", mockMedications, mockAllergies);
-        MedicalRecord m2 = new MedicalRecord("firstNameTest2", "lastNameTest2", "06091995", mockMedications, mockAllergies);
-        MedicalRecord m3 = new MedicalRecord("firstNameTest3", "lastNameTest3", "06091995", mockMedications, mockAllergies);
+        DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        Date birthDay = dateFormat.parse("01/01/2001");
+
+
+        MedicalRecord m = new MedicalRecord("firstNameTest", "lastNameTest", birthDay, mockMedications, mockAllergies);
+        MedicalRecord m2 = new MedicalRecord("firstNameTest2", "lastNameTest2", birthDay, mockMedications, mockAllergies);
+        MedicalRecord m3 = new MedicalRecord("firstNameTest3", "lastNameTest3", birthDay, mockMedications, mockAllergies);
 
         mockMedicalRecord.add(m);
         mockMedicalRecord.add(m2);
