@@ -1,10 +1,8 @@
 package com.openclassrooms.safetynetp5.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import lombok.*;
-import lombok.Data;
-import org.springframework.stereotype.Component;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Person {
     private String firstName;
     private String lastName;

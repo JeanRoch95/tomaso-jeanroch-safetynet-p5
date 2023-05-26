@@ -19,7 +19,7 @@ public class PersonController {
     private static final Logger LOGGER = LoggerFactory.getLogger(PersonController.class);
 
     @GetMapping()
-    public List<Person> getAllPersons(){
+    public List<Person> getAllPersons() {
         List<Person> personList = personService.getAllPersons();
 
         if(!personList.isEmpty()){

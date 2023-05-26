@@ -52,7 +52,7 @@ public class PersonControllerTest {
         person.setEmail(emailTest);
     }
     @Test
-    @DisplayName("Testing endpoint Get")
+    @DisplayName("Testing person endpoint Get")
     public void testGetPerson()throws Exception {
         mockMvc.perform(get("/person"))
                 .andExpect(status().isOk());
