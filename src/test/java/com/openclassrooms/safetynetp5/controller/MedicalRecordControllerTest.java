@@ -35,29 +35,21 @@ public class MedicalRecordControllerTest {
     @MockBean
     private MedicalRecordService medicalRecordService;
 
-    @MockBean
     private MedicalRecord medicalRecord;
-
-    String firstNameTest = "firstNameTest";
-
-    String lastNameTest = "lastNameTest";
-
-    DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
 
     List<String> medicationsListConst;
 
     List<String> allergiesListConst;
 
+    DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+
     @BeforeEach
     public void setUpBeforeTest() throws ParseException {
-        Date birthDay = dateFormat.parse("01/01/2001");
 
-        medicalRecord = new MedicalRecord();
-        medicalRecord.setFirstName(firstNameTest);
-        medicalRecord.setLastName(lastNameTest);
-        medicalRecord.setBirthdate(birthDay);
-        medicalRecord.setMedication(medicationsListConst);
-        medicalRecord.setAllergies(allergiesListConst);
+        Date birthDay = dateFormat.parse("01/01/2021");
+
+        medicalRecord = new MedicalRecord("firstNameTest", "lastNameTest", birthDay , medicationsListConst, allergiesListConst);
+
     }
 
     @Test
@@ -76,8 +68,8 @@ public class MedicalRecordControllerTest {
                 .content(asJsonString(medicalRecord))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.firstName").value(firstNameTest))
-                .andExpect(jsonPath("$.lastName").value(lastNameTest));
+                .andExpect(jsonPath("$.firstName").value("firstNameTest"))
+                .andExpect(jsonPath("$.lastName").value("lastNameTest"));
     }
 
     @Test
@@ -88,7 +80,7 @@ public class MedicalRecordControllerTest {
 
         when(medicalRecordService.deleteMedicalRecord(any(String.class), any(String.class))).thenReturn(medicalRecordList);
 
-        mockMvc.perform(delete("/medicalRecord?firstname=" + firstNameTest + "&lastname=" + lastNameTest)
+        mockMvc.perform(delete("/medicalRecord?firstname=" + "firstNameTest" + "&lastname=" + "lastNameTest")
                 .content(asJsonString(medicalRecord))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
@@ -100,12 +92,12 @@ public class MedicalRecordControllerTest {
 
         when(medicalRecordService.updateMedicalRecord(any(MedicalRecord.class), any(String.class), any(String.class))).thenReturn(medicalRecord);
 
-        mockMvc.perform(put("/medicalRecord?firstname=" + firstNameTest + "&lastname=" + lastNameTest)
+        mockMvc.perform(put("/medicalRecord?firstname=" + "firstNameTest" + "&lastname=" + "lastNameTest")
                 .content(asJsonString(medicalRecord))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.firstName").value(firstNameTest))
-                .andExpect(jsonPath("$.lastName").value(lastNameTest));
+                .andExpect(jsonPath("$.firstName").value("firstNameTest"))
+                .andExpect(jsonPath("$.lastName").value("lastNameTest"));
     }
 
     public static String asJsonString(final Object obj) {

@@ -29,34 +29,20 @@ public class PersonControllerTest {
     private MockMvc mockMvc;
     @MockBean
     private PersonService personService;
-    @MockBean
     private Person person;
-
-    String firstNameTest = "firstNameTest";
-    String lastNameTest = "lastNameTest";
-    String addressTest = "AddressTest";
-    String cityTest = "CityTest";
-    String zipCodeTest = "zipTest";
-    String phoneTest = "phoneTest";
-    String emailTest = "emailTest";
 
     @BeforeEach
     public void setUpTestEach() {
-        person = new Person();
-        person.setFirstName(firstNameTest);
-        person.setLastName(lastNameTest);
-        person.setAddress(addressTest);
-        person.setCity(cityTest);
-        person.setZip(zipCodeTest);
-        person.setPhone(phoneTest);
-        person.setEmail(emailTest);
+        person = new Person("firstNameTest", "lastNameTest", "addressTest", "cityTest", "zipTest", "phoneTest", "emailTest");
     }
+
     @Test
     @DisplayName("Testing person endpoint Get")
     public void testGetPerson()throws Exception {
         mockMvc.perform(get("/person"))
                 .andExpect(status().isOk());
     }
+
     @Test
     @DisplayName("Testing endpoint post")
     public void testAddingPerson()throws Exception {
@@ -67,9 +53,10 @@ public class PersonControllerTest {
                 .content(asJsonString(person))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.firstName").value(firstNameTest))
-                .andExpect(jsonPath("$.lastName").value(lastNameTest));
+                .andExpect(jsonPath("$.firstName").value("firstNameTest"))
+                .andExpect(jsonPath("$.lastName").value("lastNameTest"));
     }
+
     @Test
     @DisplayName("Testing endpoint delete")
     public void testDeletingPerson()throws Exception {
@@ -78,18 +65,19 @@ public class PersonControllerTest {
 
         when(personService.deletePerson(any(String.class), any(String.class))).thenReturn(mockResponse);
 
-        mockMvc.perform(delete("/person?firstname=" + firstNameTest + "&lastname=" + lastNameTest)
+        mockMvc.perform(delete("/person?firstname=" + "firstNameTest" + "&lastname=" + "lastNameTest")
                 .content(asJsonString(person))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
     }
+
     @Test
     @DisplayName("Testing endpoint put")
     public void testUpdatingPerson()throws Exception {
 
         when(personService.updatePerson(any(Person.class), any(String.class), any(String.class))).thenReturn(person);
 
-        mockMvc.perform(put("/person?firstname=" + firstNameTest + "&lastname=" + lastNameTest)
+        mockMvc.perform(put("/person?firstname=" + "firstNameTest" + "&lastname=" + "lastNameTest")
                 .content(asJsonString(person))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());

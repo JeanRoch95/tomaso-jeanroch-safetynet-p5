@@ -13,12 +13,10 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.lang.reflect.Array;
 import java.util.Arrays;
 import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -33,18 +31,12 @@ public class FirestationControllerTest {
     @MockBean
     private FirestationService firestationService;
 
-    @MockBean
     private Firestation firestation;
-
-    String addressTest = "addressTest";
-
-    String stationTest = "numberTest";
 
     @BeforeEach
     public void setUpTestBeforeEach() {
-        firestation = new Firestation();
-        firestation.setAddress(addressTest);
-        firestation.setStation(stationTest);
+        firestation = new Firestation("addressTest", "stationTest");
+
     }
 
     @Test
@@ -64,8 +56,8 @@ public class FirestationControllerTest {
                 .content(asJsonString(firestation))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.address").value(addressTest))
-                .andExpect(jsonPath("$.station").value(stationTest));
+                .andExpect(jsonPath("$.address").value("addressTest"))
+                .andExpect(jsonPath("$.station").value("stationTest"));
 
     }
 
@@ -77,7 +69,7 @@ public class FirestationControllerTest {
 
         when(firestationService.deleteFirestation(any(String.class), any(String.class))).thenReturn(mockResponse);
 
-        mockMvc.perform(delete("/firestation?address=" + addressTest + "&station=" + stationTest)
+        mockMvc.perform(delete("/firestation?address=" + "addressTest" + "&station=" + "stationTest")
                 .content(asJsonString(firestation))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
@@ -89,7 +81,7 @@ public class FirestationControllerTest {
 
         when(firestationService.updateFirestation(any(Firestation.class), any(String.class), any(String.class))).thenReturn(firestation);
 
-        mockMvc.perform(delete("/firestation?address=" + addressTest + "&station=" + stationTest)
+        mockMvc.perform(delete("/firestation?address=" + "addressTest" + "&station=" + "stationTest")
                 .content(asJsonString(firestation))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
