@@ -10,7 +10,9 @@ import java.util.ArrayList;
 @Repository
 public class PersonRepositoryImpl implements PersonRepository {
 
-    private DataRepository dataRepository;
+    private final List<Person> persons = new ArrayList<>();
+
+    private final DataRepository dataRepository;
 
     public PersonRepositoryImpl(DataRepository dataRepository) {
         this.dataRepository = dataRepository;
@@ -54,6 +56,19 @@ public class PersonRepositoryImpl implements PersonRepository {
                     return p;
                 })
                 .orElse(null);
+    }
+
+    @Override
+    public List<Person> findPersonByAddress(String address) {
+        List<Person> personByAddress = new ArrayList<>();
+        List<Person> persons = dataRepository.getData().getPersons();
+
+        for (Person p : persons) {
+            if (p.getAddress().contentEquals(address)) {
+                personByAddress.add(p);
+            }
+        }
+        return personByAddress;
     }
 
 }

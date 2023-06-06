@@ -10,6 +10,8 @@ public interface FirestationRepository {
 
     List<Firestation> getAll();
 
+    List<String> findAddressByStation(String station);
+
     Firestation save(Firestation firestation);
 
     List<Firestation> delete(String address, String station);

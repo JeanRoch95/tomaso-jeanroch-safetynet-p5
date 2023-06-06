@@ -21,6 +21,11 @@ public class MedicalRecordServiceImpl implements MedicalRecordService {
     }
 
     @Override
+    public MedicalRecord getMedicalRecord(String firstName, String lastName) {
+        return medicalRecordRepository.getMedicalRecord(firstName, lastName);
+    }
+
+    @Override
     public MedicalRecord createMedicalRecord(MedicalRecord medicalRecord) {
         return medicalRecordRepository.save(medicalRecord);
     }

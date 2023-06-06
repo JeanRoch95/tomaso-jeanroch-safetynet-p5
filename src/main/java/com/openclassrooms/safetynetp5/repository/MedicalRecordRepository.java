@@ -9,6 +9,8 @@ public interface MedicalRecordRepository {
 
     List<MedicalRecord> getAll();
 
+    MedicalRecord getMedicalRecord(String lastName, String firstName);
+
     MedicalRecord save(MedicalRecord medicalRecord);
 
     List<MedicalRecord> delete(String firstName, String lastName);

@@ -70,4 +70,15 @@ public class FirestationRepositoryTest {
         assertEquals("stationTestModify", listFirestation.get(0).getStation());
 
     }
+
+    @Test
+    public void testFindAddressByStation() {
+        Firestation firestationTestCreate = new Firestation("addressTestCreate", "stationTestCreate");
+        String address = "addressTestCreate";
+
+        firestationRepository.findAddressByStation(address);
+
+        assertEquals(address, firestationTestCreate.getAddress());
+
+    }
 }

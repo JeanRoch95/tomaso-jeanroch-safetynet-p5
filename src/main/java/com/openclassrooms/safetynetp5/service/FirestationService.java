@@ -1,5 +1,6 @@
 package com.openclassrooms.safetynetp5.service;
 
+import com.openclassrooms.safetynetp5.dto.InfoPersonFireDTO;
 import com.openclassrooms.safetynetp5.model.Firestation;
 import org.springframework.stereotype.Service;
 
@@ -15,5 +16,9 @@ public interface FirestationService {
     List<Firestation> deleteFirestation(String address, String station);
 
     Firestation updateFirestation(Firestation firestation, String address, String station);
+
+    List<InfoPersonFireDTO> getFireListPerson(String address);
+
+    List<String> addressCoveredByStation(String station);
 
 }

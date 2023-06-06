@@ -37,11 +37,19 @@ public class MedicalRecordRepositoryTest {
     }
 
     @Test
-    public void testGetAllMedicalRecordTest() {
+    public void testGetAllMedicalRecords() {
         List<MedicalRecord> medicalRecordList = medicalRecordRepository.getAll();
 
         assertNotNull(medicalRecordList);
         assertEquals(medicalRecordList.get(0).getFirstName(), "firstNameTest");
+    }
+
+    @Test
+    public void testGetMedicalRecord() {
+        MedicalRecord medicalRecordList = medicalRecordRepository.getMedicalRecord("firstNameTest", "lastNameTest");
+
+        assertEquals(medicalRecordList.getFirstName(), "firstNameTest");
+        assertEquals(medicalRecordList.getAllergies(), dataRepository.getData().getMedicalRecords().get(0).getAllergies());
     }
 
     @Test

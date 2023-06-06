@@ -15,4 +15,6 @@ public interface PersonRepository {
 
     Person update(Person person, String firstname, String lastname);
 
+    List<Person> findPersonByAddress(String address);
+
 }

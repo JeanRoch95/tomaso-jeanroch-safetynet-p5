@@ -1,6 +1,8 @@
 package com.openclassrooms.safetynetp5.controller;
 
+import com.openclassrooms.safetynetp5.dto.*;
 import com.openclassrooms.safetynetp5.model.Person;
+import com.openclassrooms.safetynetp5.service.FirestationService;
 import com.openclassrooms.safetynetp5.service.PersonService;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
@@ -15,6 +17,8 @@ import java.util.List;
 public class PersonController {
 
     private final PersonService personService;
+
+    private final FirestationService firestationService;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(PersonController.class);
 
@@ -66,4 +70,71 @@ public class PersonController {
             return null;
         }
     }
+
+    @GetMapping(value = "/childAlert")
+    public List<ChildInfoDTO> getChildAlert(@RequestParam("address") String address) {
+        return personService.getListChildByAddress(address);
+
+        /*if(listChild != null){
+            LOGGER.info("List of child with address : {} has been fetching", address);
+            return listChild;
+        } else {
+            LOGGER.error("Error while fetching list with address : {}", address);
+            return null;
+        }*/
+    }
+    @GetMapping(value = "/phoneAlert")
+    public List<PhoneInfoDTO> getPhoneInfo(@RequestParam("firestation") String station) throws Exception {
+        List<PhoneInfoDTO> listPhoneInfo = personService.getListPhoneInfo(station);
+
+        if(listPhoneInfo != null){
+            LOGGER.info("List of phoneInfo with number station : {} has been fetching", station);
+            return listPhoneInfo;
+        } else {
+            LOGGER.error("Error while fetching listPhoneInfo with station : {}", station);
+            return null;
+        }
+
+    }
+
+
+    @GetMapping(value = "/communityEmail")
+    public List<CommunityEmailDTO> getCommunityEmail(@RequestParam("city") String city) throws Exception {
+
+        if(city.isEmpty()) {
+            LOGGER.error("getCommunityEmail : city is empty");
+            throw new Exception("city value is empty");
+        }
+        LOGGER.info("get email success");
+        return personService.getCommunityEmail(city);
+
+    }
+    @GetMapping(value = "/fire")
+    public List<InfoPersonFireDTO> getInfoPersonFire(@RequestParam("address") String address)throws Exception {
+        List<InfoPersonFireDTO> infoPersonFireDTOList = firestationService.getFireListPerson(address);
+
+        if(!infoPersonFireDTOList.isEmpty()) {
+            LOGGER.info("List info person with address : {} has been feetching", address);
+            return infoPersonFireDTOList;
+        } else {
+            LOGGER.error("List info person fetch with address : {} has failed", address);
+            return null;
+        }
+    }
+
+    @GetMapping(value = "/flood")
+    public List<FloodHomeDTO> getFloodListHome(@RequestParam("station") List<String> station)throws Exception {
+        List<FloodHomeDTO> floodHomeDTOList = personService.getListFloodHome(station);
+
+        if(floodHomeDTOList != null) {
+            LOGGER.info("List of flood home with station : {} has been fetching", station);
+            return floodHomeDTOList;
+        } else {
+            LOGGER.error("Fetch of list person flood with station : {} has failed", station);
+            return null;
+        }
+
+
+    }
+
 }

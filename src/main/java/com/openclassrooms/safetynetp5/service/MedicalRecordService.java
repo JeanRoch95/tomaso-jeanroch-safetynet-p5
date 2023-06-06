@@ -10,6 +10,8 @@ public interface MedicalRecordService {
 
     List<MedicalRecord> getAllMedicalRecords();
 
+    MedicalRecord getMedicalRecord(String firstName, String lastName);
+
     MedicalRecord createMedicalRecord(MedicalRecord medicalRecord);
 
     List<MedicalRecord> deleteMedicalRecord(String firstName, String lastName);

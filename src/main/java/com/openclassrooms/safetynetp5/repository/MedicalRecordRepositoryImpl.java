@@ -13,11 +13,25 @@ public class MedicalRecordRepositoryImpl implements MedicalRecordRepository {
 
     private DataRepository dataRepository;
 
+
     public MedicalRecordRepositoryImpl(DataRepository dataRepository) { this.dataRepository = dataRepository; }
 
     @Override
     public List<MedicalRecord> getAll() {
         return dataRepository.getData().getMedicalRecords();
+    }
+
+    @Override
+    public MedicalRecord getMedicalRecord(String firstName, String lastName) {
+
+        List<MedicalRecord> medicalRecords = dataRepository.getData().getMedicalRecords();
+
+        for (MedicalRecord m : medicalRecords) {
+            if (m.getFirstName().contentEquals(firstName) && m.getLastName().contentEquals(lastName)) {
+                return m;
+            }
+        }
+        return null;
     }
 
     @Override

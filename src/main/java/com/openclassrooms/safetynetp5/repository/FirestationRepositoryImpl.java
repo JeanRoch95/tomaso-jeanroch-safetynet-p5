@@ -10,13 +10,26 @@ import java.util.List;
 @Repository
 public class FirestationRepositoryImpl implements FirestationRepository {
 
-    private DataRepository dataRepository;
+    private final DataRepository dataRepository;
 
     public FirestationRepositoryImpl(DataRepository dataRepository) { this.dataRepository = dataRepository; }
 
     @Override
     public List<Firestation> getAll() {
         return dataRepository.getData().getFirestations();
+    }
+
+    @Override
+    public List<String> findAddressByStation(String station) {
+        List<String> listAddress = new ArrayList<>();
+        List<Firestation> fireStation = dataRepository.getData().getFirestations();
+
+        for(Firestation s : fireStation){
+            if(s.getStation().contentEquals(station)){
+                listAddress.add(s.getAddress());
+            }
+        }
+        return listAddress;
     }
 
     @Override
