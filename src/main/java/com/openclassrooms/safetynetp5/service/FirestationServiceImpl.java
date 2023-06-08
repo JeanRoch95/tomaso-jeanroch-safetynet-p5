@@ -1,11 +1,13 @@
 package com.openclassrooms.safetynetp5.service;
 
 
+import com.openclassrooms.safetynetp5.dto.InfoPersonDTO;
 import com.openclassrooms.safetynetp5.dto.InfoPersonFireDTO;
 import com.openclassrooms.safetynetp5.model.Firestation;
 import com.openclassrooms.safetynetp5.model.Person;
 import com.openclassrooms.safetynetp5.repository.FirestationRepository;
 import com.openclassrooms.safetynetp5.repository.PersonRepository;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -20,7 +22,7 @@ public class FirestationServiceImpl implements FirestationService {
     private final PersonService personService;
 
 
-    public FirestationServiceImpl(FirestationRepository firestationRepository, PersonRepository personRepository, PersonService personService) {
+    public FirestationServiceImpl(FirestationRepository firestationRepository, PersonRepository personRepository, @Lazy PersonService personService) {
         this.firestationRepository = firestationRepository;
         this.personRepository = personRepository;
         this.personService = personService;
@@ -49,15 +51,22 @@ public class FirestationServiceImpl implements FirestationService {
 
     @Override
     public List<InfoPersonFireDTO> getFireListPerson(String address) {
-        List<InfoPersonFireDTO> infoPersonFireDTOList = new ArrayList<>();
-
         List<Person> personList = personRepository.findPersonByAddress(address);
+        List<InfoPersonFireDTO> infoPersonFireDTOS = new ArrayList<>();
+
 
         for(Person p : personList) {
-            InfoPersonFireDTO infoPersonFireDTO = personService.getFullPerson(p);
-            infoPersonFireDTOList.add(infoPersonFireDTO);
+            InfoPersonFireDTO infoPersonFireDTO = new InfoPersonFireDTO();
+
+            InfoPersonDTO infoPersonDTO = personService.getInfoPerson(p);
+
+            infoPersonFireDTO.setInfoPerson(infoPersonDTO);
+            infoPersonFireDTO.setStation(firestationRepository.findStationByAddress(address));
+            infoPersonFireDTO.setPhoneNumber(p.getPhone());
+
+            infoPersonFireDTOS.add(infoPersonFireDTO);
         }
-        return infoPersonFireDTOList;
+        return infoPersonFireDTOS;
     }
 
     @Override

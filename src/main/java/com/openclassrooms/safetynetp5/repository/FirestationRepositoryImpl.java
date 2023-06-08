@@ -33,6 +33,17 @@ public class FirestationRepositoryImpl implements FirestationRepository {
     }
 
     @Override
+    public String findStationByAddress(String address) {
+        List<Firestation> fireStations = dataRepository.getData().getFirestations();
+        for (Firestation f : fireStations) {
+            if (f.getAddress().contentEquals(address)) {
+                return f.getStation();
+            }
+        }
+        return "null";
+    }
+
+    @Override
     public Firestation save(Firestation firestation) {
         dataRepository.getData().getFirestations().add(firestation);
         return firestation;

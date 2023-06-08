@@ -11,7 +11,7 @@ import java.util.List;
 @Repository
 public class MedicalRecordRepositoryImpl implements MedicalRecordRepository {
 
-    private DataRepository dataRepository;
+    private final DataRepository dataRepository;
 
 
     public MedicalRecordRepositoryImpl(DataRepository dataRepository) { this.dataRepository = dataRepository; }

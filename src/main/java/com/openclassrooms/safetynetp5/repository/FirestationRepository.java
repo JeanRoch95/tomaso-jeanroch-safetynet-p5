@@ -12,6 +12,8 @@ public interface FirestationRepository {
 
     List<String> findAddressByStation(String station);
 
+    String findStationByAddress(String address);
+
     Firestation save(Firestation firestation);
 
     List<Firestation> delete(String address, String station);

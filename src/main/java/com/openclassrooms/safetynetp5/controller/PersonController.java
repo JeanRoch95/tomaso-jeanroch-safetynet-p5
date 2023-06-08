@@ -133,8 +133,11 @@ public class PersonController {
             LOGGER.error("Fetch of list person flood with station : {} has failed", station);
             return null;
         }
+    }
 
-
+    @GetMapping(value = "/personInfo")
+    public List<FullInfoPersonDTO> getListFullInfoPerson(@RequestParam("firstname") String firstName, @RequestParam("lastname") String lastName) {
+        return personService.getFullPersonInfo(firstName, lastName);
     }
 
 }

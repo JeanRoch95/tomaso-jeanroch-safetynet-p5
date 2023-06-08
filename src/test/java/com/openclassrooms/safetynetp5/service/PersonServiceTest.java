@@ -46,7 +46,7 @@ public class PersonServiceTest {
 
     @BeforeEach
     public void setUpBeforeTest() {
-        personService = new PersonServiceImpl(personRepository, firestationRepository, medicalRecordRepository);
+        personService = new PersonServiceImpl(personRepository, firestationRepository, medicalRecordRepository, firestationService);
     }
 
     @Test

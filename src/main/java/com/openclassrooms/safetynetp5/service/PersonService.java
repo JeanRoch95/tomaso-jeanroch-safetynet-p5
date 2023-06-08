@@ -24,9 +24,14 @@ public interface PersonService {
 
     List<ChildInfoDTO> getListChildByAddress(String address);
 
-    InfoPersonFireDTO getFullPerson(Person person);
+    InfoPersonDTO getInfoPerson(Person person);
 
     List<FloodHomeDTO> getListFloodHome(List<String> station);
+
+    List<Person> findPersonByFirstNameAndLastName(String firstName, String lastName);
+
+    List<FullInfoPersonDTO> getFullPersonInfo(String firstName, String lastName);
+
 
 }
 

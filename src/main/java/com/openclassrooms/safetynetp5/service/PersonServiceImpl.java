@@ -21,11 +21,14 @@ public class PersonServiceImpl implements PersonService {
 
     private final MedicalRecordRepository medicalRecordRepository;
 
+    private final FirestationService firestationService;
 
-    public PersonServiceImpl(PersonRepository personRepository, FirestationRepository firestationRepository, MedicalRecordRepository medicalRecordRepository) {
+
+    public PersonServiceImpl(PersonRepository personRepository, FirestationRepository firestationRepository, MedicalRecordRepository medicalRecordRepository, FirestationService firestationService) {
         this.personRepository = personRepository;
         this.firestationRepository = firestationRepository;
         this.medicalRecordRepository = medicalRecordRepository;
+        this.firestationService = firestationService;
     }
 
 
@@ -113,23 +116,20 @@ public class PersonServiceImpl implements PersonService {
     }
 
     @Override
-    public InfoPersonFireDTO getFullPerson(Person person) {
+    public InfoPersonDTO getInfoPerson(Person person) {
+        InfoPersonDTO infoPersonDTO = new InfoPersonDTO();
 
-        InfoPersonFireDTO infoPersonFireDTO = new InfoPersonFireDTO();
-
-        infoPersonFireDTO.setFirstName(person.getFirstName());
-        infoPersonFireDTO.setLastName(person.getLastName());
-        infoPersonFireDTO.setPhoneNumber(person.getPhone());
+        infoPersonDTO.setLastName(person.getLastName());
 
         MedicalRecord medicalRecord = medicalRecordRepository.getMedicalRecord(person.getFirstName(), person.getLastName());
 
         if(medicalRecord != null) {
-            infoPersonFireDTO.setAllergies(medicalRecord.getAllergies());
-            infoPersonFireDTO.setMedications(medicalRecord.getMedication());
+            infoPersonDTO.setAllergies(medicalRecord.getAllergies());
+            infoPersonDTO.setMedications(medicalRecord.getMedication());
             int age = CalculateAgeUtil.calculateAge(medicalRecord.getBirthdate());
-            infoPersonFireDTO.setAge(String.valueOf(age));
+            infoPersonDTO.setAge(String.valueOf(age));
         }
-        return infoPersonFireDTO;
+        return infoPersonDTO;
     }
 
     @Override
@@ -150,15 +150,39 @@ public class PersonServiceImpl implements PersonService {
             FloodHomeDTO floodHomeDTO = new FloodHomeDTO();
             floodHomeDTO.setAddress(s);
 
-            List<InfoPersonFireDTO> listFlood = new ArrayList<>();
+            List<InfoPersonDTO> listFlood = new ArrayList<>();
             for(Person p : personList) {
-                InfoPersonFireDTO infoPersonFireDTO = getFullPerson(p);
+                InfoPersonDTO infoPersonDTO = getInfoPerson(p);
 
-                listFlood.add(infoPersonFireDTO);
+                listFlood.add(infoPersonDTO);
             }
             floodHomeDTO.setFloodListPerson(listFlood);
             result.add(floodHomeDTO);
         }
         return result;
+    }
+
+    @Override
+    public List<Person> findPersonByFirstNameAndLastName(String firstName, String lastName) {
+        return personRepository.findPersonByFirstNameAndLastName(firstName, lastName);
+    }
+
+    @Override
+    public List<FullInfoPersonDTO> getFullPersonInfo(String firstName, String lastName) {
+        List<FullInfoPersonDTO> fullInfoPersonDTOList = new ArrayList<>();
+        List<Person> persons = findPersonByFirstNameAndLastName(firstName, lastName);
+        List<InfoPersonDTO> infoPersonDTOList = new ArrayList<>();
+
+        for(Person p : persons) {
+            FullInfoPersonDTO fullInfoPersonDTO = new FullInfoPersonDTO();
+            InfoPersonDTO infoPersonDTO = getInfoPerson(p);
+            infoPersonDTOList.add(infoPersonDTO);
+
+            fullInfoPersonDTO.setInfoPerson(infoPersonDTOList);
+            fullInfoPersonDTO.setEmail(p.getEmail());
+            fullInfoPersonDTO.setAddress(p.getAddress());
+            fullInfoPersonDTOList.add(fullInfoPersonDTO);
+        }
+        return fullInfoPersonDTOList;
     }
 }

@@ -6,12 +6,14 @@ public class FloodHomeDTO {
 
     private String address;
 
-    private List<InfoPersonFireDTO> floodListPerson;
+    private String phoneNumber;
+
+    private List<InfoPersonDTO> floodListPerson;
 
     public FloodHomeDTO() {
     }
 
-    public FloodHomeDTO(String address, List<InfoPersonFireDTO> floodListPerson) {
+    public FloodHomeDTO(String address, List<InfoPersonDTO> floodListPerson) {
         this.address = address;
         this.floodListPerson = floodListPerson;
     }
@@ -24,11 +26,11 @@ public class FloodHomeDTO {
         this.address = address;
     }
 
-    public List<InfoPersonFireDTO> getFloodListPerson() {
+    public List<InfoPersonDTO> getFloodListPerson() {
         return floodListPerson;
     }
 
-    public void setFloodListPerson(List<InfoPersonFireDTO> floodListPerson) {
+    public void setFloodListPerson(List<InfoPersonDTO> floodListPerson) {
         this.floodListPerson = floodListPerson;
     }
 }

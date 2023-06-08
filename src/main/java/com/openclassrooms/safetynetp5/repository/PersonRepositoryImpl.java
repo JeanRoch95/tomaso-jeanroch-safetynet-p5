@@ -71,4 +71,17 @@ public class PersonRepositoryImpl implements PersonRepository {
         return personByAddress;
     }
 
+    public List<Person> findPersonByFirstNameAndLastName(String firstName, String lastName) {
+        List<Person> personByFirstNameAndLastname = new ArrayList<>();
+
+        List<Person> personList = dataRepository.getData().getPersons();
+
+        for(Person p : personList) {
+            if(p.getFirstName().contentEquals(firstName) && p.getLastName().contentEquals(lastName)) {
+                personByFirstNameAndLastname.add(p);
+            }
+        }
+        return personByFirstNameAndLastname;
+    }
+
 }
