@@ -1,12 +1,14 @@
 package com.openclassrooms.safetynetp5.service;
 
 
+import com.openclassrooms.safetynetp5.dto.FireStationCoveredDTO;
 import com.openclassrooms.safetynetp5.dto.InfoPersonDTO;
 import com.openclassrooms.safetynetp5.dto.InfoPersonFireDTO;
 import com.openclassrooms.safetynetp5.model.Firestation;
 import com.openclassrooms.safetynetp5.model.Person;
 import com.openclassrooms.safetynetp5.repository.FirestationRepository;
 import com.openclassrooms.safetynetp5.repository.PersonRepository;
+import com.openclassrooms.safetynetp5.util.CalculateAgeUtil;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
@@ -72,5 +74,50 @@ public class FirestationServiceImpl implements FirestationService {
     @Override
     public List<String> addressCoveredByStation(String station) {
         return firestationRepository.findAddressByStation(station);
+    }
+
+    @Override
+    public List<FireStationCoveredDTO> getPersonCoveredByFirestation(String station) {
+        List<FireStationCoveredDTO> fireStationCoverage = new ArrayList<>();
+
+
+        List<Person> personByStation = new ArrayList<>();
+
+        List<String> addressCoveredByStation = addressCoveredByStation(station);
+
+        int countChild = 0;
+        int countAdult = 0;
+
+        // list of person
+        for (String a : addressCoveredByStation) {
+            List<Person> personByAddress = personRepository.findPersonByAddress(a);
+            personByStation.addAll(personByAddress);
+        }
+
+        for (Person p : personByStation) {
+            FireStationCoveredDTO fireStationCoveredDTO = new FireStationCoveredDTO();
+
+            InfoPersonDTO infoPersonDTO = personService.getInfoPerson(p);
+
+            fireStationCoveredDTO.setInfoPerson(infoPersonDTO);
+
+            fireStationCoverage.add(fireStationCoveredDTO);
+
+            if (CalculateAgeUtil.isChild(personService.getAge(p))) {
+                countChild++;
+            } else
+                countAdult++;
+
+            fireStationCoveredDTO.setChildCount(countChild);
+            fireStationCoveredDTO.setAdultCount(countAdult);
+            fireStationCoveredDTO.setAddress(p.getAddress());
+            fireStationCoveredDTO.setPhoneNumber(p.getPhone());
+            fireStationCoveredDTO.setFirstName(p.getFirstName());
+
+        }
+
+
+        return fireStationCoverage;
+
     }
 }

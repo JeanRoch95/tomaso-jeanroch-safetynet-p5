@@ -15,7 +15,7 @@ public class MedicalRecord {
     @JsonFormat(pattern = "dd/MM/YYYY")
     private Date birthdate;
 
-    private List<String> medication;
+    private List<String> medications;
 
     private List<String> allergies;
 
@@ -30,7 +30,7 @@ public class MedicalRecord {
         } else {
             this.birthdate = new Date(birthdate.getTime());
         };
-        this.medication = medication;
+        this.medications = medication;
         this.allergies = allergies;
     }
 
@@ -63,12 +63,12 @@ public class MedicalRecord {
         }
     }
 
-    public List<String> getMedication() {
-        return medication;
+    public List<String> getMedications() {
+        return medications;
     }
 
-    public void setMedication(List<String> medication) {
-        this.medication = medication;
+    public void setMedications(List<String> medications) {
+        this.medications = medications;
     }
 
     public List<String> getAllergies() {

@@ -125,7 +125,7 @@ public class PersonServiceImpl implements PersonService {
 
         if(medicalRecord != null) {
             infoPersonDTO.setAllergies(medicalRecord.getAllergies());
-            infoPersonDTO.setMedications(medicalRecord.getMedication());
+            infoPersonDTO.setMedications(medicalRecord.getMedications());
             int age = CalculateAgeUtil.calculateAge(medicalRecord.getBirthdate());
             infoPersonDTO.setAge(String.valueOf(age));
         }
@@ -163,6 +163,18 @@ public class PersonServiceImpl implements PersonService {
     }
 
     @Override
+    public int getAge(Person person) {
+
+        int agePerson = 0;
+        MedicalRecord medicalRecord = medicalRecordRepository.getMedicalRecord(person.getFirstName(), person.getLastName());
+
+        if(medicalRecord != null) {
+            agePerson = CalculateAgeUtil.calculateAge(medicalRecord.getBirthdate());
+        }
+        return agePerson;
+    }
+
+    @Override
     public List<Person> findPersonByFirstNameAndLastName(String firstName, String lastName) {
         return personRepository.findPersonByFirstNameAndLastName(firstName, lastName);
     }
@@ -170,7 +182,7 @@ public class PersonServiceImpl implements PersonService {
     @Override
     public List<FullInfoPersonDTO> getFullPersonInfo(String firstName, String lastName) {
         List<FullInfoPersonDTO> fullInfoPersonDTOList = new ArrayList<>();
-        List<Person> persons = findPersonByFirstNameAndLastName(firstName, lastName);
+        List<Person> persons = personRepository.findPersonByFirstNameAndLastName(firstName, lastName);
         List<InfoPersonDTO> infoPersonDTOList = new ArrayList<>();
 
         for(Person p : persons) {
@@ -182,6 +194,7 @@ public class PersonServiceImpl implements PersonService {
             fullInfoPersonDTO.setEmail(p.getEmail());
             fullInfoPersonDTO.setAddress(p.getAddress());
             fullInfoPersonDTOList.add(fullInfoPersonDTO);
+
         }
         return fullInfoPersonDTOList;
     }

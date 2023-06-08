@@ -140,4 +140,9 @@ public class PersonController {
         return personService.getFullPersonInfo(firstName, lastName);
     }
 
+    @GetMapping(value = "/firestation")
+    public List<FireStationCoveredDTO> getFireStationCoverage(@RequestParam("stationNumber") String station) throws Exception {
+        return firestationService.getPersonCoveredByFirestation(station);
+    }
+
 }

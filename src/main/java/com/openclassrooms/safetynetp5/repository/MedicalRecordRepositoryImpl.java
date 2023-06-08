@@ -1,7 +1,6 @@
 package com.openclassrooms.safetynetp5.repository;
 
 
-import com.openclassrooms.safetynetp5.model.Firestation;
 import com.openclassrooms.safetynetp5.model.MedicalRecord;
 import org.springframework.stereotype.Repository;
 
@@ -63,7 +62,7 @@ public class MedicalRecordRepositoryImpl implements MedicalRecordRepository {
                 .findFirst()
                 .map(mr -> {
                     if (medicalRecord.getBirthdate() != null) mr.setBirthdate(medicalRecord.getBirthdate());
-                    if (medicalRecord.getMedication() != null) mr.setMedication(medicalRecord.getMedication());
+                    if (medicalRecord.getMedications() != null) mr.setMedications(medicalRecord.getMedications());
                     if (medicalRecord.getAllergies() != null) mr.setAllergies(medicalRecord.getAllergies());
                     return mr;
                 })

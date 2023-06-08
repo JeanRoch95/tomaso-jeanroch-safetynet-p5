@@ -1,5 +1,6 @@
 package com.openclassrooms.safetynetp5.service;
 
+import com.openclassrooms.safetynetp5.dto.FireStationCoveredDTO;
 import com.openclassrooms.safetynetp5.dto.InfoPersonFireDTO;
 import com.openclassrooms.safetynetp5.model.Firestation;
 import org.springframework.stereotype.Service;
@@ -20,5 +21,7 @@ public interface FirestationService {
     List<InfoPersonFireDTO> getFireListPerson(String address);
 
     List<String> addressCoveredByStation(String station);
+
+    List<FireStationCoveredDTO> getPersonCoveredByFirestation(String station);
 
 }

@@ -1,5 +1,8 @@
 package com.openclassrooms.safetynetp5.util;
 
+import com.openclassrooms.safetynetp5.model.MedicalRecord;
+import com.openclassrooms.safetynetp5.model.Person;
+
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;

@@ -28,10 +28,10 @@ public interface PersonService {
 
     List<FloodHomeDTO> getListFloodHome(List<String> station);
 
+    int getAge(Person person);
+
     List<Person> findPersonByFirstNameAndLastName(String firstName, String lastName);
 
     List<FullInfoPersonDTO> getFullPersonInfo(String firstName, String lastName);
-
-
 }
 
