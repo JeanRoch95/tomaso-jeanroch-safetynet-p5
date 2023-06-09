@@ -73,12 +73,20 @@ public class FirestationRepositoryTest {
 
     @Test
     public void testFindAddressByStation() {
-        Firestation firestationTestCreate = new Firestation("addressTestCreate", "stationTestCreate");
-        String address = "addressTestCreate";
+        firestationRepository.findAddressByStation("stationTest");
 
-        firestationRepository.findAddressByStation(address);
+        List<Firestation> firestationList = firestationRepository.getAll();
 
-        assertEquals(address, firestationTestCreate.getAddress());
+        assertEquals("addressTest", firestationList.get(0).getAddress());
 
+    }
+
+    @Test
+    public void testFindStationByAddress() {
+        firestationRepository.findStationByAddress("addressTest");
+
+        List<Firestation> firestationList = firestationRepository.getAll();
+
+        assertEquals("stationTest", firestationList.get(0).getStation());
     }
 }

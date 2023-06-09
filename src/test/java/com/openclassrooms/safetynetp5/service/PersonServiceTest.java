@@ -1,9 +1,6 @@
 package com.openclassrooms.safetynetp5.service;
 
-import com.openclassrooms.safetynetp5.dto.CommunityEmailDTO;
-import com.openclassrooms.safetynetp5.dto.FloodHomeDTO;
-import com.openclassrooms.safetynetp5.dto.InfoPersonFireDTO;
-import com.openclassrooms.safetynetp5.dto.PhoneInfoDTO;
+import com.openclassrooms.safetynetp5.dto.*;
 import com.openclassrooms.safetynetp5.model.Firestation;
 import com.openclassrooms.safetynetp5.model.MedicalRecord;
 import com.openclassrooms.safetynetp5.model.Person;
@@ -16,7 +13,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.boot.test.mock.mockito.MockBean;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -28,6 +24,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
+
 @ExtendWith(MockitoExtension.class)
 public class PersonServiceTest {
     @Mock
@@ -160,11 +157,9 @@ public class PersonServiceTest {
         when(medicalRecordRepository.getMedicalRecord(any(String.class), any(String.class))).thenReturn(medicalRecord);
 
 
-        InfoPersonFireDTO infoPersonFireDTO = personService.getFullPerson(person);
+        InfoPersonDTO infoPersonDTO = personService.getInfoPerson(person);
 
-        assertEquals(infoPersonFireDTO.getFirstName(), "firstNameTest");
-        assertEquals(infoPersonFireDTO.getLastName(), "lastNameTest");
-        assertEquals(infoPersonFireDTO.getPhoneNumber(), "phoneTest");
+        assertEquals(infoPersonDTO.getLastName(), "lastNameTest");
 
     }
     @Test
@@ -194,10 +189,94 @@ public class PersonServiceTest {
         when(medicalRecordRepository.getMedicalRecord(any(String.class), any(String.class))).thenReturn(medicalRecordTest);
 
 
-        // WHEN
         List<FloodHomeDTO> listFloodHomeTest = personService.getListFloodHome(listAddressTest);
 
-        // THEN
         assertEquals(listFloodHomeTest.size(), 4);
+        FloodHomeDTO floodHomeDTO = listFloodHomeTest.get(0);
+        assertEquals(floodHomeDTO.getAddress(), "Address1");
+        FloodHomeDTO floodHomeDTO2 = listFloodHomeTest.get(1);
+        assertEquals(floodHomeDTO2.getAddress(), "Address2");
+
+    }
+
+    @Test
+    public void test_than_return_age()throws ParseException {
+        Person testPerson = new Person();
+        testPerson.setFirstName("firstNameTest");
+        testPerson.setLastName("lastNameTest");
+        MedicalRecord testMedicalRecord = new MedicalRecord();
+        String stringDate = "01/01/1990";
+        DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        Date birthDay = dateFormat.parse(stringDate);
+
+        testMedicalRecord.setBirthdate(birthDay);
+
+        when(medicalRecordRepository.getMedicalRecord(anyString(), anyString())).thenReturn(testMedicalRecord);
+
+        int age = personService.getAge(testPerson);
+
+        assertEquals(33, age);
+
+    }
+
+    @Test
+    public void test_than_return_list_of_child_by_address()throws ParseException {
+        String address = "TestAddress";
+
+        Person testPerson = new Person();
+        testPerson.setFirstName("John");
+        testPerson.setLastName("Doe");
+        testPerson.setAddress(address);
+
+        MedicalRecord testMedicalRecord = new MedicalRecord();
+
+        String stringDate = "01/01/2022";
+        DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        Date birthDay = dateFormat.parse(stringDate);
+        testMedicalRecord.setBirthdate(birthDay);
+        when(personRepository.findPersonByAddress(anyString())).thenReturn(Arrays.asList(testPerson));
+        when(medicalRecordRepository.getMedicalRecord(anyString(), anyString())).thenReturn(testMedicalRecord);
+
+        // When
+        List<ChildInfoDTO> result = personService.getListChildByAddress(address);
+
+        // Then
+        assertEquals(1, result.size());
+        ChildInfoDTO dto = result.get(0);
+        assertEquals(testPerson.getFirstName(), dto.getFirstName());
+        assertEquals(testPerson.getLastName(), dto.getLastName());
+    }
+
+    @Test
+    public void test_than_return_full_info_person() {
+        String firstName = "firstNameTest";
+        String lastName = "lastNameTest";
+        Person person = new Person();
+        person.setFirstName(firstName);
+        person.setLastName(lastName);
+
+
+        when(personRepository.findPersonByFirstNameAndLastName(anyString(), anyString())).thenReturn(Arrays.asList(person));
+
+        List<FullInfoPersonDTO> result = personService.getFullPersonInfo(firstName, lastName);
+
+        assertEquals(1, result.size());
+    }
+
+    @Test
+    public void test_than_find_person_by_firstName_and_lastName() {
+        String firstName = "firstNameTest";
+        String lastName = "lastNameTest";
+        Person person = new Person();
+
+        person.setFirstName(firstName);
+        person.setLastName(lastName);
+
+        when(personRepository.findPersonByFirstNameAndLastName(any(String.class), any(String.class))).thenReturn(Arrays.asList(person));
+
+        List<Person> result = personService.findPersonByFirstNameAndLastName(firstName, lastName);
+
+        assertEquals(result.size(), 1);
+        assertEquals(result.get(0).getFirstName(), "firstNameTest");
     }
 }

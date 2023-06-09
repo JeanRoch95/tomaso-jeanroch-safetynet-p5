@@ -1,10 +1,7 @@
 package com.openclassrooms.safetynetp5.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.openclassrooms.safetynetp5.dto.ChildInfoDTO;
-import com.openclassrooms.safetynetp5.dto.FloodHomeDTO;
-import com.openclassrooms.safetynetp5.dto.InfoPersonFireDTO;
-import com.openclassrooms.safetynetp5.dto.PhoneInfoDTO;
+import com.openclassrooms.safetynetp5.dto.*;
 import com.openclassrooms.safetynetp5.model.Person;
 import com.openclassrooms.safetynetp5.service.FirestationService;
 import com.openclassrooms.safetynetp5.service.PersonService;
@@ -18,6 +15,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -127,10 +125,13 @@ public class PersonControllerTest {
     @Test
     public void testGetFirePersonList()throws Exception {
         InfoPersonFireDTO infoPersonFireDTO = new InfoPersonFireDTO();
-        infoPersonFireDTO.setFirstName("firstNameTest");
-        infoPersonFireDTO.setLastName("lastNameTest");
-        infoPersonFireDTO.setAge("10");
+
+        InfoPersonDTO infoPersonDTO = new InfoPersonDTO();
+        infoPersonDTO.setLastName("lastNameTest");
+        infoPersonDTO.setAge("10");
+        infoPersonFireDTO.setInfoPerson(infoPersonDTO);
         infoPersonFireDTO.setStation("stationTest");
+        infoPersonFireDTO.setPhoneNumber("phoneTest");
 
         List<InfoPersonFireDTO> infoPersonFireDTOList = new ArrayList<>();
         infoPersonFireDTOList.add(infoPersonFireDTO);
@@ -139,7 +140,6 @@ public class PersonControllerTest {
 
         mockMvc.perform(get("/person/fire?address=address").contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)).andExpect(status().isOk())
-                .andExpect(jsonPath("$..firstName").value("firstNameTest"))
                 .andExpect(jsonPath("$..lastName").value("lastNameTest"))
                 .andExpect(jsonPath("$..age").value("10"));
     }
@@ -157,6 +157,36 @@ public class PersonControllerTest {
         when(personService.getListFloodHome(listStation)).thenReturn(floodHomeDTOList);
 
         mockMvc.perform(get("/person/flood?station=1")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    public void testGetListFullInfoPerson()throws Exception {
+        FullInfoPersonDTO fullInfoPersonDTO = new FullInfoPersonDTO();
+
+        List<FullInfoPersonDTO> fullInfoPersonDTOList = new ArrayList<>();
+        fullInfoPersonDTOList.add(fullInfoPersonDTO);
+
+
+
+        when(personService.getFullPersonInfo(any(String.class), any(String.class))).thenReturn(fullInfoPersonDTOList);
+
+        mockMvc.perform(get("/person/personInfo?firstname=firstNameTest&lastname=lastNameTest")
+                        .contentType(MediaType.APPLICATION_JSON))
+                        .andExpect(status().isOk());
+    }
+
+    @Test
+    public void testGetFireStationCoverage()throws Exception {
+        FireStationCoveredDTO fireStationCoveredDTO = new FireStationCoveredDTO();
+
+        List<FireStationCoveredDTO> fireStationCoveredDTOList = new ArrayList<>();
+        fireStationCoveredDTOList.add(fireStationCoveredDTO);
+
+        when(firestationService.getPersonCoveredByFirestation(any(String.class))).thenReturn(fireStationCoveredDTOList);
+
+        mockMvc.perform(get("/person/firestation?stationNumber=1")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
     }

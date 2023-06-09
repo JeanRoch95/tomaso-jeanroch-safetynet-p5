@@ -68,4 +68,22 @@ public class PersonRepositoryTest {
 
         assertEquals("address2", listPersons.get(0).getAddress());
     }
+
+    @Test
+    public void testFindPersonByFirstNameAndLastName() {
+        personRepository.findPersonByFirstNameAndLastName("firstNameTest", "lastNameTest");
+
+        List<Person> listPersons = personRepository.getAll();
+
+        assertEquals("firstNameTest", listPersons.get(0).getFirstName());
+    }
+
+    @Test
+    public void testFindPersonByAddress() {
+        personRepository.findPersonByAddress("addressTest");
+
+        List<Person> listPersons = personRepository.getAll();
+
+        assertEquals("firstNameTest2", listPersons.get(1).getFirstName());
+    }
 }

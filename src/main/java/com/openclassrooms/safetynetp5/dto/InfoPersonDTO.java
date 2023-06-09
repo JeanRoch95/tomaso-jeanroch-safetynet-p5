@@ -15,6 +15,13 @@ public class InfoPersonDTO {
     public InfoPersonDTO() {
     }
 
+    public InfoPersonDTO(String lastName, String age, List<String> medications, List<String> allergies) {
+        this.lastName = lastName;
+        this.age = age;
+        this.medications = medications;
+        this.allergies = allergies;
+    }
+
     public String getLastName() {
         return lastName;
     }

@@ -1,5 +1,7 @@
 package com.openclassrooms.safetynetp5.service;
 
+import com.openclassrooms.safetynetp5.dto.FireStationCoveredDTO;
+import com.openclassrooms.safetynetp5.dto.InfoPersonDTO;
 import com.openclassrooms.safetynetp5.dto.InfoPersonFireDTO;
 import com.openclassrooms.safetynetp5.model.Firestation;
 import com.openclassrooms.safetynetp5.model.MedicalRecord;
@@ -14,6 +16,9 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 import static org.mockito.Mockito.when;
@@ -122,5 +127,24 @@ public class FirestationServiceTest {
         assertEquals(result.get(1), "addressTest2");
     }
 
+    @Test
+    public void test_than_return_person_covered_by_firestation()throws ParseException {
+        List<String> addressList = new ArrayList<>();
+        String address = "addressTest";
+
+        addressList.add(address);
+
+        when(firestationService.addressCoveredByStation(any(String.class))).thenReturn(addressList);
+
+        Person person1 = new Person();
+        Person person2 = new Person();
+        List<Person> personList = new ArrayList<>();
+        personList.add(person1);
+        personList.add(person2);
+
+        when(personRepository.findPersonByAddress(any(String.class))).thenReturn(personList);
+
+        assertEquals(firestationService.getPersonCoveredByFirestation("station").size(), 2);
+    }
 
 }
