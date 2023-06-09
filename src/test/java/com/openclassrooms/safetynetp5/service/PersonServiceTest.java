@@ -107,9 +107,9 @@ public class PersonServiceTest {
 
         when(personRepository.getAll()).thenReturn(persons);
 
-        List<CommunityEmailDTO> communityEmailTest = personService.getCommunityEmail("City");
+        CommunityEmailDTO communityEmailTest = personService.getCommunityEmail("City");
 
-        assertEquals(communityEmailTest.size(),2);
+        assertEquals(communityEmailTest.getEmail().size(),2);
     }
 
     @Test

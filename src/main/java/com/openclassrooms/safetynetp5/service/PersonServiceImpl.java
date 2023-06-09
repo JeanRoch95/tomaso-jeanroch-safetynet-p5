@@ -51,17 +51,17 @@ public class PersonServiceImpl implements PersonService {
     }
 
     @Override
-    public List<CommunityEmailDTO> getCommunityEmail(String city) {
-        List<CommunityEmailDTO> result = new ArrayList<>();
+    public CommunityEmailDTO getCommunityEmail(String city) {
+        CommunityEmailDTO result = new CommunityEmailDTO();
         List<Person> persons = personRepository.getAll();
+        List<String> emailPerson = new ArrayList<>();
 
         for (Person p : persons) {
             if (p.getCity().contentEquals(city)) {
-                CommunityEmailDTO communityEmail = new CommunityEmailDTO();
-                communityEmail.setEmail(p.getEmail());
-                result.add(communityEmail);
+                emailPerson.add(p.getEmail());
             }
         }
+        result.setEmail(emailPerson);
         return result;
     }
 

@@ -16,7 +16,7 @@ public interface PersonService {
 
     Person updatePerson(Person person, String firstName, String lastName);
 
-    List<CommunityEmailDTO> getCommunityEmail(String city);
+    CommunityEmailDTO getCommunityEmail(String city);
 
     List<PhoneInfoDTO> getListPhoneInfo(String station);
 

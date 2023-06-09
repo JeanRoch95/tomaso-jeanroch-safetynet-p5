@@ -97,9 +97,8 @@ public class PersonController {
 
     }
 
-
     @GetMapping(value = "/communityEmail")
-    public List<CommunityEmailDTO> getCommunityEmail(@RequestParam("city") String city) throws Exception {
+    public CommunityEmailDTO getCommunityEmail(@RequestParam("city") String city) throws Exception {
 
         if(city.isEmpty()) {
             LOGGER.error("getCommunityEmail : city is empty");

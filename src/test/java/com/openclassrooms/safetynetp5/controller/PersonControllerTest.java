@@ -94,6 +94,20 @@ public class PersonControllerTest {
     }
 
     @Test
+    public void testGetCommunityEmail()throws Exception {
+        CommunityEmailDTO communityEmailDTO = new CommunityEmailDTO();
+        List<String> emailTest = new ArrayList<>();
+        emailTest.add("EmailTest");
+        communityEmailDTO.setEmail(emailTest);
+
+        when(personService.getCommunityEmail(any(String.class))).thenReturn(communityEmailDTO);
+
+        mockMvc.perform(get("/person/communityEmail?city=cityTest")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
+    }
+
+    @Test
     public void testChildAlert()throws Exception {
 
         ChildInfoDTO childInfoDTO = new ChildInfoDTO("firstNameTest", "lastNameTest", 12);
