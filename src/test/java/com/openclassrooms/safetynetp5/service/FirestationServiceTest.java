@@ -51,7 +51,7 @@ public class FirestationServiceTest {
     }
 
     @Test
-    public void test_than_read_return_list() {
+    public void testGetAllFirestation() {
 
         List<Firestation> mockFirestations = Arrays.asList(new Firestation(), new Firestation());
         when(firestationService.getAllFirestation()).thenReturn(mockFirestations);
@@ -63,7 +63,7 @@ public class FirestationServiceTest {
     }
 
     @Test
-    public void test_than_firestation_is_save() {
+    public void testSaveFirestation() {
         Firestation mockFirestation = new Firestation();
         when(firestationRepository.save(any(Firestation.class))).thenReturn(mockFirestation);
 
@@ -74,7 +74,7 @@ public class FirestationServiceTest {
     }
 
     @Test
-    public void test_than_firestation_is_delete() {
+    public void testDeleteFirestation() {
          String address = "Address";
          String station = "Station";
          List<Firestation> mockFirestation = List.of(new Firestation());
@@ -87,7 +87,7 @@ public class FirestationServiceTest {
     }
 
     @Test
-    public void test_than_firestation_is_updated() {
+    public void testUpdateFirestation() {
         String address = "Address";
         String station = "Station";
         Firestation mockFirestation = new Firestation();
@@ -99,7 +99,7 @@ public class FirestationServiceTest {
         verify(firestationRepository).update(mockFirestation, address, station);
     }
     @Test
-    public void test_than_info_person_is_return() {
+    public void testGetFireListPerson() {
         List<Person> personList = Arrays.asList(new Person(), new Person());
 
         when(personRepository.findPersonByAddress(any(String.class))).thenReturn(personList);
@@ -109,7 +109,7 @@ public class FirestationServiceTest {
         assertEquals(list.size(), 2);
     }
     @Test
-    public void test_than_return_list_address_covered_by_station() {
+    public void testAddressCoveredByStation() {
         List<String> addressList = new ArrayList<>();
         String address = "addressTest";
         String address2 = "addressTest2";
@@ -128,7 +128,7 @@ public class FirestationServiceTest {
     }
 
     @Test
-    public void test_than_return_person_covered_by_firestation()throws ParseException {
+    public void testGetPersonCoveredByFirestation()throws ParseException {
         List<String> addressList = new ArrayList<>();
         String address = "addressTest";
 

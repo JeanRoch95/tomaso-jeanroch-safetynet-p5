@@ -1,43 +1,23 @@
 package com.openclassrooms.safetynetp5.dto;
 
+import java.util.List;
+
 public class PhoneInfoDTO {
 
-    private String firstName;
+    private List<String> phoneNumber;
 
-    private String lastName;
-
-    private String phoneNumber;
-
-    public PhoneInfoDTO(String firstName, String lastName, String phoneNumber) {
-        this.firstName = firstName;
-        this.lastName = lastName;
+    public PhoneInfoDTO(List<String> phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
 
     public PhoneInfoDTO() {
     }
 
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
-    public String getPhoneNumber() {
+    public List<String> getPhoneNumber() {
         return phoneNumber;
     }
 
-    public void setPhoneNumber(String phoneNumber) {
+    public void setPhoneNumber(List<String> phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
 }

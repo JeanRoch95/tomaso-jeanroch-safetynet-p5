@@ -66,24 +66,22 @@ public class PersonServiceImpl implements PersonService {
     }
 
     @Override
-    public List<PhoneInfoDTO> getListPhoneInfo(String station) {
-        List<PhoneInfoDTO> result = new ArrayList<>();
+    public PhoneInfoDTO getListPhoneInfo(String station) {
+        PhoneInfoDTO result = new PhoneInfoDTO();
         List<Person> personList = personRepository.getAll();
         List<Firestation> firestationList = firestationRepository.getAll();
+        List<String> allPhoneList = new ArrayList<>();
 
         for(Firestation f : firestationList){
             if(f.getStation().equals(station)){
                 for(Person p : personList) {
                     if (f.getAddress().equals(p.getAddress())) {
-                        PhoneInfoDTO phoneInfoDTO = new PhoneInfoDTO();
-                        phoneInfoDTO.setFirstName(p.getFirstName());
-                        phoneInfoDTO.setLastName(p.getLastName());
-                        phoneInfoDTO.setPhoneNumber(p.getPhone());
-                        result.add(phoneInfoDTO);
+                        allPhoneList.add(p.getPhone());
                     }
                 }
             }
         }
+        result.setPhoneNumber(allPhoneList);
         return result;
     }
 

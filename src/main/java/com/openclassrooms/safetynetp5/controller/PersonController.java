@@ -74,18 +74,10 @@ public class PersonController {
     @GetMapping(value = "/childAlert")
     public List<ChildInfoDTO> getChildAlert(@RequestParam("address") String address) {
         return personService.getListChildByAddress(address);
-
-        /*if(listChild != null){
-            LOGGER.info("List of child with address : {} has been fetching", address);
-            return listChild;
-        } else {
-            LOGGER.error("Error while fetching list with address : {}", address);
-            return null;
-        }*/
     }
     @GetMapping(value = "/phoneAlert")
-    public List<PhoneInfoDTO> getPhoneInfo(@RequestParam("firestation") String station) throws Exception {
-        List<PhoneInfoDTO> listPhoneInfo = personService.getListPhoneInfo(station);
+    public PhoneInfoDTO getPhoneInfo(@RequestParam("firestation") String station) throws Exception {
+        PhoneInfoDTO listPhoneInfo = personService.getListPhoneInfo(station);
 
         if(listPhoneInfo != null){
             LOGGER.info("List of phoneInfo with number station : {} has been fetching", station);

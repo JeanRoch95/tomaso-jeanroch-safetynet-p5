@@ -123,17 +123,16 @@ public class PersonControllerTest {
     }
     @Test
     public void testPhoneInfoList()throws Exception {
-        PhoneInfoDTO phoneInfoDTO = new PhoneInfoDTO("firstNameTest", "lastNameTest", "phoneTest");
-        List<PhoneInfoDTO> phoneInfoDTOList = new ArrayList<>();
-        phoneInfoDTOList.add(phoneInfoDTO);
+        PhoneInfoDTO phoneInfoDTO = new PhoneInfoDTO();
+        List<String> phoneTest = new ArrayList<>();
+        phoneTest.add("testPhone");
+        phoneInfoDTO.setPhoneNumber(phoneTest);
 
-        when(personService.getListPhoneInfo(any(String.class))).thenReturn(phoneInfoDTOList);
+        when(personService.getListPhoneInfo(any(String.class))).thenReturn(phoneInfoDTO);
 
         mockMvc.perform(get("/person/phoneAlert?firestation=stationTest")
                 .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$..firstName").value("firstNameTest"))
-                .andExpect(jsonPath("$..lastName").value("lastNameTest"))
-                .andExpect(jsonPath("$..phoneNumber").value("phoneTest"))
+                .andExpect(jsonPath("$.phoneNumber").value("testPhone"))
                 .andExpect(status().isOk());
     }
     @Test

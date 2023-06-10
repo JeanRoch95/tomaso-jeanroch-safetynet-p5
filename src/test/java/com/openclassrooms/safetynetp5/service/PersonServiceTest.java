@@ -47,7 +47,7 @@ public class PersonServiceTest {
     }
 
     @Test
-    public void test_than_read_return_list() {
+    public void testGetAllPerson() {
 
         List<Person> mockPersons = Arrays.asList(new Person(), new Person());
         when(personRepository.getAll()).thenReturn(mockPersons);
@@ -59,7 +59,7 @@ public class PersonServiceTest {
 
     }
     @Test
-    public void test_than_person_is_save() {
+    public void testSavePerson() {
         Person mockPerson = new Person();
         when(personRepository.save(any(Person.class))).thenReturn(mockPerson);
 
@@ -70,7 +70,7 @@ public class PersonServiceTest {
 
     }
     @Test
-    public void test_than_person_is_delete() {
+    public void testDeletePerson() {
 
         String firstName = "John";
         String lastName = "Doe";
@@ -84,7 +84,7 @@ public class PersonServiceTest {
 
     }
     @Test
-    public void test_than_person_is_updated() {
+    public void testUpdatePerson() {
 
         String firstName = "John";
         String lastName = "Doe";
@@ -98,7 +98,7 @@ public class PersonServiceTest {
     }
 
     @Test
-    public void test_than_return_email() {
+    public void testCommunityEmail() {
         List<Person> persons = new ArrayList<>();
         Person person1 = new Person("firstname", "lastname", "", "City", "", "", "email1");
         Person person2 = new Person("firstname", "lastname", "", "City", "", "", "email2");
@@ -113,7 +113,7 @@ public class PersonServiceTest {
     }
 
     @Test
-    public void test_than_return_phone_info() {
+    public void testGetListPhoneInfo() {
 
         List<Person> personList = new ArrayList<>();
         personList.add(new Person("firstNameTest", "lastNameTest", "Address1", "phoneTest1"));
@@ -126,16 +126,16 @@ public class PersonServiceTest {
         when(personRepository.getAll()).thenReturn(personList);
         when(firestationRepository.getAll()).thenReturn(firestationList);
 
-        List<PhoneInfoDTO> result = personService.getListPhoneInfo("station1");
+        PhoneInfoDTO result = personService.getListPhoneInfo("station1");
+        PhoneInfoDTO result2 = personService.getListPhoneInfo("station2");
 
         assertEquals(2, personList.size());
         assertEquals(2, firestationList.size());
-        assertEquals(1, result.size());
-        PhoneInfoDTO phoneInfoDTO = result.get(0);
-        assertEquals("firstNameTest", phoneInfoDTO.getFirstName());
+        assertEquals("phoneTest1", result.getPhoneNumber().get(0));
+        assertEquals("phoneTest2", result2.getPhoneNumber().get(0));
     }
     @Test
-    public void test_than_return_full_person()throws ParseException {
+    public void testGetInfoPerson()throws ParseException {
 
         Person person = new Person();
         person.setFirstName("firstNameTest");
@@ -163,7 +163,7 @@ public class PersonServiceTest {
 
     }
     @Test
-    public void test_than_return_flood_fire_list()throws ParseException {
+    public void testGetListFloodHome()throws ParseException {
         // GIVEN
         List<String> listAddressTest = new ArrayList<>();
         String address1 = "Address1";
@@ -200,7 +200,7 @@ public class PersonServiceTest {
     }
 
     @Test
-    public void test_than_return_age()throws ParseException {
+    public void testGetAge()throws ParseException {
         Person testPerson = new Person();
         testPerson.setFirstName("firstNameTest");
         testPerson.setLastName("lastNameTest");
@@ -220,7 +220,7 @@ public class PersonServiceTest {
     }
 
     @Test
-    public void test_than_return_list_of_child_by_address()throws ParseException {
+    public void testGetListOfChildByAddress()throws ParseException {
         String address = "TestAddress";
 
         Person testPerson = new Person();
@@ -248,7 +248,7 @@ public class PersonServiceTest {
     }
 
     @Test
-    public void test_than_return_full_info_person() {
+    public void testGetFullInfoPerson() {
         String firstName = "firstNameTest";
         String lastName = "lastNameTest";
         Person person = new Person();
@@ -264,7 +264,7 @@ public class PersonServiceTest {
     }
 
     @Test
-    public void test_than_find_person_by_firstName_and_lastName() {
+    public void testGetPersonByFirstNameAndLastName() {
         String firstName = "firstNameTest";
         String lastName = "lastNameTest";
         Person person = new Person();

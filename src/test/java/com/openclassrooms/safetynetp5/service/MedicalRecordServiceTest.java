@@ -31,7 +31,7 @@ public class MedicalRecordServiceTest {
     }
 
     @Test
-    public void test_than_read_return_list() {
+    public void testGetAllMedicalRecords() {
 
         List<MedicalRecord> mockMedicalRecord  = Arrays.asList(new MedicalRecord(), new MedicalRecord());
         when(medicalRecordRepository.getAll()).thenReturn(mockMedicalRecord);
@@ -43,7 +43,7 @@ public class MedicalRecordServiceTest {
     }
 
     @Test
-    public void test_than_medicalRecord_is_save() {
+    public void testSaveMedicalRecord() {
         MedicalRecord mockMedicalRecord = new MedicalRecord();
         when(medicalRecordRepository.save(any(MedicalRecord.class))).thenReturn(mockMedicalRecord);
 
@@ -54,7 +54,7 @@ public class MedicalRecordServiceTest {
     }
 
     @Test
-    public void test_than_firestation_is_delete() {
+    public void testDeleteMedicalRecord() {
         String firstName = "firstNameTest";
         String lastName = "lastNameTest";
         List<MedicalRecord> mockMedicalRecord = List.of(new MedicalRecord());
@@ -67,7 +67,7 @@ public class MedicalRecordServiceTest {
     }
 
     @Test
-    public void test_than_firestation_is_updated() {
+    public void testUpdateMedicalRecord() {
         String firstName = "firstNameTest";
         String lastName = "lastNameTest";
         MedicalRecord mockMedicalRecord = new MedicalRecord();
