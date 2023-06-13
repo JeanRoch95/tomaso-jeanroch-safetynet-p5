@@ -1,6 +1,8 @@
 package com.openclassrooms.safetynetp5.service;
 
+import com.openclassrooms.safetynetp5.controller.PersonController;
 import com.openclassrooms.safetynetp5.dto.*;
+import com.openclassrooms.safetynetp5.exceptions.ArgumentNotFoundException;
 import com.openclassrooms.safetynetp5.model.Firestation;
 import com.openclassrooms.safetynetp5.model.MedicalRecord;
 import com.openclassrooms.safetynetp5.model.Person;
@@ -8,9 +10,12 @@ import com.openclassrooms.safetynetp5.repository.FirestationRepository;
 import com.openclassrooms.safetynetp5.repository.MedicalRecordRepository;
 import com.openclassrooms.safetynetp5.repository.PersonRepository;
 import com.openclassrooms.safetynetp5.util.CalculateAgeUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 @Service
 public class PersonServiceImpl implements PersonService {
@@ -22,6 +27,8 @@ public class PersonServiceImpl implements PersonService {
     private final MedicalRecordRepository medicalRecordRepository;
 
     private final FirestationService firestationService;
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(PersonController.class);
 
 
     public PersonServiceImpl(PersonRepository personRepository, FirestationRepository firestationRepository, MedicalRecordRepository medicalRecordRepository, FirestationService firestationService) {
@@ -57,8 +64,11 @@ public class PersonServiceImpl implements PersonService {
         List<String> emailPerson = new ArrayList<>();
 
         for (Person p : persons) {
-            if (p.getCity().contentEquals(city)) {
+            if (p.getCity().contentEquals(city) || p.getCity().toLowerCase().contentEquals(city.toLowerCase())) {
                 emailPerson.add(p.getEmail());
+            } else {
+                LOGGER.error("City not found");
+                throw new ArgumentNotFoundException();
             }
         }
         result.setEmail(emailPerson);
@@ -71,6 +81,11 @@ public class PersonServiceImpl implements PersonService {
         List<Person> personList = personRepository.getAll();
         List<Firestation> firestationList = firestationRepository.getAll();
         List<String> allPhoneList = new ArrayList<>();
+
+        if(!firestationService.getListStationNumber().contains(station)){
+            LOGGER.error("Station not found");
+            throw new ArgumentNotFoundException();
+        }
 
         for(Firestation f : firestationList){
             if(f.getStation().equals(station)){
@@ -94,6 +109,11 @@ public class PersonServiceImpl implements PersonService {
 
         List<Person> allPersonInAddress = personRepository.findPersonByAddress(address);
         List<ChildInfoDTO> listChild = new ArrayList<>();
+
+        if(!firestationService.getListAddress().contains(address)){
+            LOGGER.error("Address not in the database");
+            throw new ArgumentNotFoundException();
+        }
 
         for (Person p : allPersonInAddress) {
             MedicalRecord medicalRecord = medicalRecordRepository.getMedicalRecord(p.getFirstName(), p.getLastName());
@@ -134,11 +154,18 @@ public class PersonServiceImpl implements PersonService {
     public List<FloodHomeDTO> getListFloodHome(List<String> station) {
         List<FloodHomeDTO> result = new ArrayList<>();
         List<String> address = new ArrayList<>();
+        List<String> listStation = firestationService.getListStationNumber();
 
         for(String s : station) {
-            List<String> addressByStation = new ArrayList<>();
-            addressByStation = firestationRepository.findAddressByStation(s);
-            address.addAll(addressByStation);
+            if(listStation.contains(s)){
+                List<String> addressByStation = new ArrayList<>();
+                addressByStation = firestationRepository.findAddressByStation(s);
+                address.addAll(addressByStation);
+            } else {
+                LOGGER.error("Station: {} not found", s);
+                throw new ArgumentNotFoundException();
+            }
+
         }
 
         for(String s : address) {
@@ -188,7 +215,7 @@ public class PersonServiceImpl implements PersonService {
             InfoPersonDTO infoPersonDTO = getInfoPerson(p);
             infoPersonDTOList.add(infoPersonDTO);
 
-            fullInfoPersonDTO.setInfoPerson(infoPersonDTOList);
+            fullInfoPersonDTO.setPersons(infoPersonDTOList);
             fullInfoPersonDTO.setEmail(p.getEmail());
             fullInfoPersonDTO.setAddress(p.getAddress());
             fullInfoPersonDTOList.add(fullInfoPersonDTO);

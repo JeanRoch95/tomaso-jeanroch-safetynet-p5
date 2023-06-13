@@ -98,4 +98,26 @@ public interface FirestationService {
      */
     List<FireStationCoveredDTO> getPersonCoveredByFirestation(String station);
 
+    /**
+     * Retrieves a list of the address of all the firestation on database.
+     *
+     * <p>
+     * This method is used to handle errors
+     * </p>
+     *
+     * @return A list of String that contains all the address in the database
+     */
+    List<String> getListAddress();
+
+    /**
+     * Retrieves a list of the station number of all the firestation on database.
+     *
+     * <p>
+     * This method is used to handle errors
+     * </p>
+     *
+     * @return A list of String that contains all the station number in the database
+     */
+    List<String> getListStationNumber();
+
 }

@@ -8,7 +8,7 @@ public class FullInfoPersonDTO {
 
     private String address;
 
-    private List<InfoPersonDTO> InfoPerson;
+    private List<InfoPersonDTO> persons;
 
     public FullInfoPersonDTO() {
     }
@@ -29,11 +29,11 @@ public class FullInfoPersonDTO {
         this.address = address;
     }
 
-    public List<InfoPersonDTO> getInfoPerson() {
-        return InfoPerson;
+    public List<InfoPersonDTO> getPersons() {
+        return persons;
     }
 
-    public void setInfoPerson(List<InfoPersonDTO> infoPerson) {
-        InfoPerson = infoPerson;
+    public void setPersons(List<InfoPersonDTO> persons) {
+        this.persons = persons;
     }
 }

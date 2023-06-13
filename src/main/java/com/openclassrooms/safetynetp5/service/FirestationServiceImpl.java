@@ -1,18 +1,23 @@
 package com.openclassrooms.safetynetp5.service;
 
 
+import com.openclassrooms.safetynetp5.controller.PersonController;
 import com.openclassrooms.safetynetp5.dto.FireStationCoveredDTO;
 import com.openclassrooms.safetynetp5.dto.InfoPersonDTO;
 import com.openclassrooms.safetynetp5.dto.InfoPersonFireDTO;
+import com.openclassrooms.safetynetp5.exceptions.ArgumentNotFoundException;
 import com.openclassrooms.safetynetp5.model.Firestation;
 import com.openclassrooms.safetynetp5.model.Person;
 import com.openclassrooms.safetynetp5.repository.FirestationRepository;
 import com.openclassrooms.safetynetp5.repository.PersonRepository;
 import com.openclassrooms.safetynetp5.util.CalculateAgeUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 @Service
 public class FirestationServiceImpl implements FirestationService {
@@ -22,6 +27,9 @@ public class FirestationServiceImpl implements FirestationService {
     private final PersonRepository personRepository;
 
     private final PersonService personService;
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(PersonController.class);
+
 
 
     public FirestationServiceImpl(FirestationRepository firestationRepository, PersonRepository personRepository, @Lazy PersonService personService) {
@@ -56,7 +64,6 @@ public class FirestationServiceImpl implements FirestationService {
         List<Person> personList = personRepository.findPersonByAddress(address);
         List<InfoPersonFireDTO> infoPersonFireDTOS = new ArrayList<>();
 
-
         for(Person p : personList) {
             InfoPersonFireDTO infoPersonFireDTO = new InfoPersonFireDTO();
 
@@ -76,19 +83,41 @@ public class FirestationServiceImpl implements FirestationService {
         return firestationRepository.findAddressByStation(station);
     }
 
+    public List<String> getListAddress(){
+        List<Firestation> firestationsList = firestationRepository.getAll();
+        List<String> addressList = new ArrayList<>();
+
+        for(Firestation s : firestationsList) {
+            addressList.add(s.getAddress());
+        }
+        return addressList;
+    }
+
+    public List<String> getListStationNumber() {
+        List<Firestation> firestationList = firestationRepository.getAll();
+        List<String> stationNumberList = new ArrayList<>();
+
+        for(Firestation f : firestationList) {
+            stationNumberList.add(f.getStation());
+        }
+        return stationNumberList;
+    }
+
     @Override
     public List<FireStationCoveredDTO> getPersonCoveredByFirestation(String station) {
         List<FireStationCoveredDTO> fireStationCoverage = new ArrayList<>();
-
-
         List<Person> personByStation = new ArrayList<>();
-
         List<String> addressCoveredByStation = addressCoveredByStation(station);
+        List<String> validStations = Arrays.asList("1", "2", "3", "4");
+
+        if(!validStations.contains(station)){
+            LOGGER.error("Station: {} do not exist", station);
+            throw new ArgumentNotFoundException();
+        }
 
         int countChild = 0;
         int countAdult = 0;
 
-        // list of person
         for (String a : addressCoveredByStation) {
             List<Person> personByAddress = personRepository.findPersonByAddress(a);
             personByStation.addAll(personByAddress);
