@@ -78,9 +78,9 @@ public class PersonController {
     }
 
     @GetMapping(value = "/phoneAlert")
-    public PhoneInfoDTO getPhoneInfo(@RequestParam("firestation") String station) throws Exception {
+    public List<String> getPhoneInfo(@RequestParam("firestation") String station) {
 
-        PhoneInfoDTO listPhoneInfo = personService.getListPhoneInfo(station);
+        List<String> listPhoneInfo = personService.getListPhoneInfo(station);
         LOGGER.info("List has been fetched");
 
         return listPhoneInfo;
@@ -89,7 +89,7 @@ public class PersonController {
     }
 
     @GetMapping(value = "/communityEmail")
-    public CommunityEmailDTO getCommunityEmail(@RequestParam("city") String city) throws Exception {
+    public List<String> getCommunityEmail(@RequestParam("city") String city) throws Exception {
         return personService.getCommunityEmail(city);
     }
 

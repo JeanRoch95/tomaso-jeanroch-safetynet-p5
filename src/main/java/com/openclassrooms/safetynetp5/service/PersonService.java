@@ -67,7 +67,7 @@ public interface PersonService {
      * @return A {@link CommunityEmailDTO} object containing a list of emails of persons residing in the
      * specified city.
      */
-    CommunityEmailDTO getCommunityEmail(String city);
+    List<String> getCommunityEmail(String city);
 
     /**
      * Retrieves a list of phone information for persons covered by the specified fire station.
@@ -82,7 +82,7 @@ public interface PersonService {
      * @return A list of {@link PhoneInfoDTO} objects representing phone information of persons served by
      * the specified fire station.
      */
-    PhoneInfoDTO getListPhoneInfo(String station);
+    List<String> getListPhoneInfo(String station);
 
     /**
      * Retrieves a list of persons residing at a given address.

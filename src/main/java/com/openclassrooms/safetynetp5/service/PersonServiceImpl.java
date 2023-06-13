@@ -58,8 +58,7 @@ public class PersonServiceImpl implements PersonService {
     }
 
     @Override
-    public CommunityEmailDTO getCommunityEmail(String city) {
-        CommunityEmailDTO result = new CommunityEmailDTO();
+    public List<String> getCommunityEmail(String city) {
         List<Person> persons = personRepository.getAll();
         List<String> emailPerson = new ArrayList<>();
 
@@ -71,13 +70,11 @@ public class PersonServiceImpl implements PersonService {
                 throw new ArgumentNotFoundException();
             }
         }
-        result.setEmail(emailPerson);
-        return result;
+        return emailPerson;
     }
 
     @Override
-    public PhoneInfoDTO getListPhoneInfo(String station) {
-        PhoneInfoDTO result = new PhoneInfoDTO();
+    public List<String> getListPhoneInfo(String station) {
         List<Person> personList = personRepository.getAll();
         List<Firestation> firestationList = firestationRepository.getAll();
         List<String> allPhoneList = new ArrayList<>();
@@ -96,8 +93,7 @@ public class PersonServiceImpl implements PersonService {
                 }
             }
         }
-        result.setPhoneNumber(allPhoneList);
-        return result;
+        return allPhoneList;
     }
 
     @Override
