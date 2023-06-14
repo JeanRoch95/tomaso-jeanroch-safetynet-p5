@@ -55,6 +55,7 @@ public class MedicalRecordControllerTest {
     @Test
     @DisplayName("Testing medical record endpoint get")
     public void testGetMedicalRecord()throws Exception {
+        when(medicalRecordService.getAllMedicalRecords()).thenReturn(Arrays.asList(medicalRecord));
         mockMvc.perform(get("/medicalRecord"))
                 .andExpect(status().isOk());
     }

@@ -107,9 +107,9 @@ public class PersonServiceTest {
 
         when(personRepository.getAll()).thenReturn(persons);
 
-        CommunityEmailDTO communityEmailTest = personService.getCommunityEmail("City");
+        List<String> communityEmailTest = personService.getCommunityEmail("City");
 
-        assertEquals(communityEmailTest.getEmail().size(),2);
+        assertEquals(communityEmailTest.size(),2);
     }
 
     @Test
@@ -123,16 +123,19 @@ public class PersonServiceTest {
         firestationList.add(new Firestation("Address1", "station1"));
         firestationList.add(new Firestation("Address2", "station2"));
 
+        List<String> listFirestation = Arrays.asList("station1", "station2");
+
         when(personRepository.getAll()).thenReturn(personList);
         when(firestationRepository.getAll()).thenReturn(firestationList);
+        when(firestationService.getListStationNumber()).thenReturn(listFirestation);
 
-        PhoneInfoDTO result = personService.getListPhoneInfo("station1");
-        PhoneInfoDTO result2 = personService.getListPhoneInfo("station2");
+        List<String> result = personService.getListPhoneInfo("station1");
+        List<String> result2 = personService.getListPhoneInfo("station2");
 
         assertEquals(2, personList.size());
         assertEquals(2, firestationList.size());
-        assertEquals("phoneTest1", result.getPhoneNumber().get(0));
-        assertEquals("phoneTest2", result2.getPhoneNumber().get(0));
+        assertEquals("phoneTest1", result.get(0));
+        assertEquals("phoneTest2", result2.get(0));
     }
     @Test
     public void testGetInfoPerson()throws ParseException {
@@ -165,18 +168,27 @@ public class PersonServiceTest {
     @Test
     public void testGetListFloodHome()throws ParseException {
         // GIVEN
-        List<String> listAddressTest = new ArrayList<>();
-        String address1 = "Address1";
+        List<String> listStation = new ArrayList<>();
+        String station1 = "Station1";
+        String station2 = "Station2";
+        listStation.add(station1);
+        listStation.add(station2);
+
+        List<String> addressList = new ArrayList<>();
+        String address = "Address1";
         String address2 = "Address2";
-        listAddressTest.add(address1);
-        listAddressTest.add(address2);
-        when(firestationRepository.findAddressByStation(any(String.class))).thenReturn(listAddressTest);
+        addressList.add(address);
+        addressList.add(address2);
+
+        when(firestationRepository.findAddressByStation(any(String.class))).thenReturn(addressList);
 
         List<Person> listPersonTest = new ArrayList<>();
         Person person1 = new Person("firstname", "lastname", "", "City", "", "", "email1");
         Person person2 = new Person("firstname", "lastname", "", "City", "", "", "email2");
         listPersonTest.add(person1);
         listPersonTest.add(person2);
+
+        when(firestationService.getListStationNumber()).thenReturn(listStation);
         when(personRepository.findPersonByAddress(any(String.class))).thenReturn(listPersonTest);
 
         String stringDate = "01/01/1990";
@@ -189,7 +201,7 @@ public class PersonServiceTest {
         when(medicalRecordRepository.getMedicalRecord(any(String.class), any(String.class))).thenReturn(medicalRecordTest);
 
 
-        List<FloodHomeDTO> listFloodHomeTest = personService.getListFloodHome(listAddressTest);
+        List<FloodHomeDTO> listFloodHomeTest = personService.getListFloodHome(listStation);
 
         assertEquals(listFloodHomeTest.size(), 4);
         FloodHomeDTO floodHomeDTO = listFloodHomeTest.get(0);
@@ -234,6 +246,7 @@ public class PersonServiceTest {
         DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
         Date birthDay = dateFormat.parse(stringDate);
         testMedicalRecord.setBirthdate(birthDay);
+        when(firestationService.getListAddress()).thenReturn(Arrays.asList(address));
         when(personRepository.findPersonByAddress(anyString())).thenReturn(Arrays.asList(testPerson));
         when(medicalRecordRepository.getMedicalRecord(anyString(), anyString())).thenReturn(testMedicalRecord);
 

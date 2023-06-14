@@ -42,6 +42,9 @@ public class FirestationControllerTest {
     @Test
     @DisplayName("Testing endpoint Get")
     public void testGetStation() throws Exception {
+
+        when(firestationService.getAllFirestation()).thenReturn(Arrays.asList(firestation));
+
         mockMvc.perform(get("/firestation"))
                 .andExpect(status().isOk());
     }
@@ -78,10 +81,9 @@ public class FirestationControllerTest {
     @Test
     @DisplayName("Testing endpoint put")
     public void testUpdateFirestation()throws Exception {
-
         when(firestationService.updateFirestation(any(Firestation.class), any(String.class), any(String.class))).thenReturn(firestation);
 
-        mockMvc.perform(delete("/firestation?address=" + "addressTest" + "&station=" + "stationTest")
+        mockMvc.perform(put("/firestation?address=" + "addressTest" + "&station=" + "stationTest")
                 .content(asJsonString(firestation))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());

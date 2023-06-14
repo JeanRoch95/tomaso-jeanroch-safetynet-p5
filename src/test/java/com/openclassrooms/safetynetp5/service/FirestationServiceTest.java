@@ -128,7 +128,7 @@ public class FirestationServiceTest {
     }
 
     @Test
-    public void testGetPersonCoveredByFirestation()throws ParseException {
+    public void testGetPersonCoveredByFirestation() {
         List<String> addressList = new ArrayList<>();
         String address = "addressTest";
 
@@ -145,6 +145,38 @@ public class FirestationServiceTest {
         when(personRepository.findPersonByAddress(any(String.class))).thenReturn(personList);
 
         assertEquals(firestationService.getPersonCoveredByFirestation("station").size(), 2);
+    }
+
+    @Test
+    public void testGetListAddress() {
+        Firestation firestation1 = new Firestation();
+        firestation1.setAddress("AddressTest1");
+        Firestation firestation2 = new Firestation();
+        firestation2.setAddress("AddressTest2");
+
+        when(firestationRepository.getAll()).thenReturn(Arrays.asList(firestation1, firestation2));
+
+        List<String> addresses = firestationService.getListAddress();
+
+        assertEquals(2, addresses.size());
+        assertEquals("AddressTest1", addresses.get(0));
+        assertEquals("AddressTest2", addresses.get(1));
+    }
+
+    @Test
+    public void testGetStationNumber() {
+        Firestation firestation1 = new Firestation();
+        firestation1.setStation("1");
+        Firestation firestation2 = new Firestation();
+        firestation2.setStation("2");
+
+        when(firestationRepository.getAll()).thenReturn(Arrays.asList(firestation1, firestation2));
+
+        List<String> stationNumber = firestationService.getListStationNumber();
+
+        assertEquals(2, stationNumber.size());
+        assertEquals("1", stationNumber.get(0));
+        assertEquals("2", stationNumber.get(1));
     }
 
 }

@@ -108,9 +108,8 @@ public class FirestationServiceImpl implements FirestationService {
         List<FireStationCoveredDTO> fireStationCoverage = new ArrayList<>();
         List<Person> personByStation = new ArrayList<>();
         List<String> addressCoveredByStation = addressCoveredByStation(station);
-        List<String> validStations = Arrays.asList("1", "2", "3", "4");
 
-        if(!validStations.contains(station)){
+        if(getListStationNumber().contains(station)){
             LOGGER.error("Station: {} do not exist", station);
             throw new ArgumentNotFoundException();
         }

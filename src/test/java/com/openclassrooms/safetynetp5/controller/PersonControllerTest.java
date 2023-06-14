@@ -49,6 +49,8 @@ public class PersonControllerTest {
     @Test
     @DisplayName("Testing person endpoint Get")
     public void testGetPerson()throws Exception {
+        when(personService.getAllPersons()).thenReturn(Arrays.asList(person));
+
         mockMvc.perform(get("/person"))
                 .andExpect(status().isOk());
     }
@@ -95,12 +97,10 @@ public class PersonControllerTest {
 
     @Test
     public void testGetCommunityEmail()throws Exception {
-        CommunityEmailDTO communityEmailDTO = new CommunityEmailDTO();
         List<String> emailTest = new ArrayList<>();
         emailTest.add("EmailTest");
-        communityEmailDTO.setEmail(emailTest);
 
-        when(personService.getCommunityEmail(any(String.class))).thenReturn(communityEmailDTO);
+        when(personService.getCommunityEmail(any(String.class))).thenReturn(emailTest);
 
         mockMvc.perform(get("/person/communityEmail?city=cityTest")
                 .contentType(MediaType.APPLICATION_JSON))
@@ -123,16 +123,13 @@ public class PersonControllerTest {
     }
     @Test
     public void testPhoneInfoList()throws Exception {
-        PhoneInfoDTO phoneInfoDTO = new PhoneInfoDTO();
         List<String> phoneTest = new ArrayList<>();
         phoneTest.add("testPhone");
-        phoneInfoDTO.setPhoneNumber(phoneTest);
 
-        when(personService.getListPhoneInfo(any(String.class))).thenReturn(phoneInfoDTO);
+        when(personService.getListPhoneInfo(any(String.class))).thenReturn(phoneTest);
 
         mockMvc.perform(get("/person/phoneAlert?firestation=stationTest")
                 .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.phoneNumber").value("testPhone"))
                 .andExpect(status().isOk());
     }
     @Test

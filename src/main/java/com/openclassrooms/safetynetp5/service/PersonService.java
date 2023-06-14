@@ -57,14 +57,14 @@ public interface PersonService {
      * Retrieves the emails of all persons in a given city.
      *
      * <p>
-     * This method returns a {@link CommunityEmailDTO} object which includes a list of email addresses
+     * This method returns a String object which includes a list of email addresses
      * of all the persons living in the specified city.
      * </p>
      *
      * @param city The name of the city for which emails are to be retrieved.
      * This should be a non-null string representing a valid city name.
      *
-     * @return A {@link CommunityEmailDTO} object containing a list of emails of persons residing in the
+     * @return A String object containing a list of emails of persons residing in the
      * specified city.
      */
     List<String> getCommunityEmail(String city);
@@ -73,13 +73,13 @@ public interface PersonService {
      * Retrieves a list of phone information for persons covered by the specified fire station.
      *
      * <p>
-     * This method returns a list of {@link PhoneInfoDTO} objects, each of which includes
+     * This method returns a list of String objects, each of which includes
      * the phone information of a person served by the fire station identified by the 'station' parameter.
      * </p>
      *
      * @param station The identifier of the fire station for which person's phone information is to be retrieved.
      *
-     * @return A list of {@link PhoneInfoDTO} objects representing phone information of persons served by
+     * @return A list of String objects representing phone information of persons served by
      * the specified fire station.
      */
     List<String> getListPhoneInfo(String station);
