@@ -17,6 +17,8 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 public class PersonServiceImpl implements PersonService {
 
@@ -204,19 +206,26 @@ public class PersonServiceImpl implements PersonService {
     public List<FullInfoPersonDTO> getFullPersonInfo(String firstName, String lastName) {
         List<FullInfoPersonDTO> fullInfoPersonDTOList = new ArrayList<>();
         List<Person> persons = personRepository.findPersonByFirstNameAndLastName(firstName, lastName);
-        List<InfoPersonDTO> infoPersonDTOList = new ArrayList<>();
+
+        List<Person> personsByLastName = personRepository.findPersonByLastName(lastName);
+
+        List<Person> filteredList = personsByLastName.stream()
+                .filter(person -> !person.getFirstName().equals(firstName))
+                .collect(Collectors.toList());
+
+        persons.addAll(filteredList);
+
 
         for(Person p : persons) {
             FullInfoPersonDTO fullInfoPersonDTO = new FullInfoPersonDTO();
             InfoPersonDTO infoPersonDTO = getInfoPerson(p);
-            infoPersonDTOList.add(infoPersonDTO);
 
-            fullInfoPersonDTO.setPersons(infoPersonDTOList);
+            fullInfoPersonDTO.setPersons(infoPersonDTO);
             fullInfoPersonDTO.setEmail(p.getEmail());
             fullInfoPersonDTO.setAddress(p.getAddress());
             fullInfoPersonDTOList.add(fullInfoPersonDTO);
-
         }
+
         return fullInfoPersonDTOList;
     }
 }
