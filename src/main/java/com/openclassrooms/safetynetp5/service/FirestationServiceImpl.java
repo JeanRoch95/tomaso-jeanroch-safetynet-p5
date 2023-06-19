@@ -6,6 +6,9 @@ import com.openclassrooms.safetynetp5.dto.FireStationCoveredDTO;
 import com.openclassrooms.safetynetp5.dto.InfoPersonDTO;
 import com.openclassrooms.safetynetp5.dto.InfoPersonFireDTO;
 import com.openclassrooms.safetynetp5.exceptions.ArgumentNotFoundException;
+import com.openclassrooms.safetynetp5.exceptions.FirestationNotFoundException;
+import com.openclassrooms.safetynetp5.exceptions.PersonNotFoundException;
+import com.openclassrooms.safetynetp5.exceptions.ResourceNotFoundException;
 import com.openclassrooms.safetynetp5.model.Firestation;
 import com.openclassrooms.safetynetp5.model.Person;
 import com.openclassrooms.safetynetp5.repository.FirestationRepository;
@@ -15,6 +18,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.MissingRequestValueException;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -41,7 +45,13 @@ public class FirestationServiceImpl implements FirestationService {
 
     @Override
     public List<Firestation> getAllFirestation() {
-        return firestationRepository.getAll();
+        List<Firestation> firestationList = firestationRepository.getAll();
+
+        if(firestationList.isEmpty()) {
+            LOGGER.error("No data was found");
+            throw new ResourceNotFoundException();
+        }
+        return firestationList;
     }
 
     @Override
@@ -51,18 +61,31 @@ public class FirestationServiceImpl implements FirestationService {
 
     @Override
     public List<Firestation> deleteFirestation(String address, String station) {
-        return firestationRepository.delete(address, station);
+        List<Firestation> firestationDeleted = firestationRepository.delete(address, station);
+
+        if(firestationDeleted.isEmpty()) {
+            LOGGER.error("Firestation with address: {} and station number: {} not found", address, station);
+            throw new FirestationNotFoundException();
+        }
+        return firestationDeleted;
     }
 
     @Override
     public Firestation updateFirestation(Firestation firestation, String address, String station) {
-        return firestationRepository.update(firestation, address, station);
+        Firestation firestationUpdated = firestationRepository.update(firestation, address, station);
+
+        if(firestationUpdated == null) {
+            LOGGER.error("Firestation with address: {} and station number: {} not found", address, station);
+            throw new PersonNotFoundException();
+        }
+        return firestationUpdated;
     }
 
     @Override
     public List<InfoPersonFireDTO> getFireListPerson(String address) {
         List<Person> personList = personRepository.findPersonByAddress(address);
         List<InfoPersonFireDTO> infoPersonFireDTOS = new ArrayList<>();
+
 
         for(Person p : personList) {
             InfoPersonFireDTO infoPersonFireDTO = new InfoPersonFireDTO();
@@ -75,6 +98,12 @@ public class FirestationServiceImpl implements FirestationService {
 
             infoPersonFireDTOS.add(infoPersonFireDTO);
         }
+
+        if(infoPersonFireDTOS.isEmpty()) {
+            LOGGER.error("Address not found");
+            throw new ArgumentNotFoundException();
+        }
+
         return infoPersonFireDTOS;
     }
 
@@ -144,6 +173,10 @@ public class FirestationServiceImpl implements FirestationService {
 
         }
 
+        if(fireStationCoverage.isEmpty()){
+            LOGGER.error("Param NULL");
+            throw new ArgumentNotFoundException();
+        }
 
         return fireStationCoverage;
 

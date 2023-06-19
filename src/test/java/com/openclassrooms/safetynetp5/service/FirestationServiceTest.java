@@ -3,6 +3,10 @@ package com.openclassrooms.safetynetp5.service;
 import com.openclassrooms.safetynetp5.dto.FireStationCoveredDTO;
 import com.openclassrooms.safetynetp5.dto.InfoPersonDTO;
 import com.openclassrooms.safetynetp5.dto.InfoPersonFireDTO;
+import com.openclassrooms.safetynetp5.exceptions.FirestationNotFoundException;
+import com.openclassrooms.safetynetp5.exceptions.MedicalRecordNotFoundException;
+import com.openclassrooms.safetynetp5.exceptions.PersonNotFoundException;
+import com.openclassrooms.safetynetp5.exceptions.ResourceNotFoundException;
 import com.openclassrooms.safetynetp5.model.Firestation;
 import com.openclassrooms.safetynetp5.model.MedicalRecord;
 import com.openclassrooms.safetynetp5.model.Person;
@@ -21,6 +25,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.when;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
@@ -52,13 +57,23 @@ public class FirestationServiceTest {
 
     @Test
     public void testGetAllFirestation() {
-
         List<Firestation> mockFirestations = Arrays.asList(new Firestation(), new Firestation());
-        when(firestationService.getAllFirestation()).thenReturn(mockFirestations);
+        when(firestationRepository.getAll()).thenReturn(mockFirestations);
 
         List<Firestation> result = firestationService.getAllFirestation();
 
         assertEquals(mockFirestations, result);
+        verify(firestationRepository).getAll();
+    }
+
+    @Test
+    public void testGetAllFirestations_whenNoRecords() {
+        when(firestationRepository.getAll()).thenReturn(Collections.emptyList());
+
+        assertThrows(ResourceNotFoundException.class, () -> {
+            firestationService.getAllFirestation();
+        });
+
         verify(firestationRepository).getAll();
     }
 
@@ -87,6 +102,20 @@ public class FirestationServiceTest {
     }
 
     @Test
+    public void testDeleteFirestation_whenNoRecord_shouldThrowException() {
+        String address = "addressTest";
+        String station = "stationTest";
+
+        when(firestationRepository.delete(address, station)).thenReturn(Collections.emptyList());
+
+        assertThrows(FirestationNotFoundException.class, () -> {
+            firestationService.deleteFirestation(address, station);
+        });
+
+        verify(firestationRepository).delete(address, station);
+    }
+
+    @Test
     public void testUpdateFirestation() {
         String address = "Address";
         String station = "Station";
@@ -98,6 +127,22 @@ public class FirestationServiceTest {
         assertEquals(mockFirestation, result);
         verify(firestationRepository).update(mockFirestation, address, station);
     }
+
+    @Test
+    public void testUpdateFirestation_whenRecordNotFound() {
+        Firestation mockFirestation = new Firestation();
+        String address = "addressTest";
+        String station  = "stationTest";
+
+        when(firestationRepository.update(mockFirestation, address, station)).thenReturn(null);
+
+        assertThrows(PersonNotFoundException.class, () -> {
+            firestationService.updateFirestation(mockFirestation, address, station);
+        });
+
+        verify(firestationRepository).update(mockFirestation, address, station);
+    }
+
     @Test
     public void testGetFireListPerson() {
         List<Person> personList = Arrays.asList(new Person(), new Person());

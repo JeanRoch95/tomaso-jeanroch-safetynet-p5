@@ -3,6 +3,9 @@ package com.openclassrooms.safetynetp5.service;
 import com.openclassrooms.safetynetp5.controller.PersonController;
 import com.openclassrooms.safetynetp5.dto.*;
 import com.openclassrooms.safetynetp5.exceptions.ArgumentNotFoundException;
+import com.openclassrooms.safetynetp5.exceptions.FirestationNotFoundException;
+import com.openclassrooms.safetynetp5.exceptions.PersonNotFoundException;
+import com.openclassrooms.safetynetp5.exceptions.ResourceNotFoundException;
 import com.openclassrooms.safetynetp5.model.Firestation;
 import com.openclassrooms.safetynetp5.model.MedicalRecord;
 import com.openclassrooms.safetynetp5.model.Person;
@@ -13,6 +16,7 @@ import com.openclassrooms.safetynetp5.util.CalculateAgeUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.MissingRequestValueException;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -43,20 +47,40 @@ public class PersonServiceImpl implements PersonService {
 
     @Override
     public List<Person> getAllPersons() {
-        return personRepository.getAll();
+        List<Person> personList = personRepository.getAll();
+
+        if(personList.isEmpty()) {
+            LOGGER.error("No data was found");
+            throw new ResourceNotFoundException();
+        }
+        return personList;
     }
 
     @Override
     public Person createPerson(Person person) {
         return personRepository.save(person);
     }
+
     @Override
     public List<Person> deletePerson(String firstName, String lastName) {
-        return personRepository.delete(firstName, lastName);
+        List<Person> removedPersons =  personRepository.delete(firstName, lastName);
+
+        if(removedPersons.isEmpty()) {
+            LOGGER.error("Person with name: {} and lastname: {} not found", firstName, lastName);
+            throw new PersonNotFoundException();
+        }
+        return removedPersons;
     }
+
     @Override
     public Person updatePerson(Person person, String firstName, String lastName) {
-        return personRepository.update(person, firstName, lastName);
+        Person personUpdated = personRepository.update(person, firstName, lastName);
+
+        if(personUpdated == null) {
+            LOGGER.error("Person with name: {} and lastname: {} not found", firstName, lastName);
+            throw new PersonNotFoundException();
+        }
+        return personUpdated;
     }
 
     @Override
@@ -69,7 +93,7 @@ public class PersonServiceImpl implements PersonService {
                 emailPerson.add(p.getEmail());
             } else {
                 LOGGER.error("City not found");
-                throw new ArgumentNotFoundException();
+                throw new PersonNotFoundException();
             }
         }
         return emailPerson;
@@ -182,6 +206,11 @@ public class PersonServiceImpl implements PersonService {
             floodHomeDTO.setFloodListPerson(listFlood);
             result.add(floodHomeDTO);
         }
+
+        if(result.isEmpty()){
+            LOGGER.error("Param NULL");
+            throw new ArgumentNotFoundException();
+        }
         return result;
     }
 
@@ -207,13 +236,15 @@ public class PersonServiceImpl implements PersonService {
         List<FullInfoPersonDTO> fullInfoPersonDTOList = new ArrayList<>();
         List<Person> persons = personRepository.findPersonByFirstNameAndLastName(firstName, lastName);
 
-        List<Person> personsByLastName = personRepository.findPersonByLastName(lastName);
+        if(!persons.isEmpty()) {
+            List<Person> personsByLastName = personRepository.findPersonByLastName(lastName);
 
-        List<Person> filteredList = personsByLastName.stream()
-                .filter(person -> !person.getFirstName().equals(firstName))
-                .collect(Collectors.toList());
+            List<Person> filteredList = personsByLastName.stream()
+                    .filter(person -> !person.getFirstName().equals(firstName))
+                    .collect(Collectors.toList());
 
-        persons.addAll(filteredList);
+            persons.addAll(filteredList);
+        }
 
 
         for(Person p : persons) {
@@ -224,6 +255,11 @@ public class PersonServiceImpl implements PersonService {
             fullInfoPersonDTO.setEmail(p.getEmail());
             fullInfoPersonDTO.setAddress(p.getAddress());
             fullInfoPersonDTOList.add(fullInfoPersonDTO);
+        }
+
+        if(fullInfoPersonDTOList.isEmpty()){
+            LOGGER.error("Person with firstname {} and lastname {} not found.", firstName, lastName);
+            throw new PersonNotFoundException();
         }
 
         return fullInfoPersonDTOList;

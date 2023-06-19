@@ -13,12 +13,14 @@ public class DataRepositoryImpl implements DataRepository {
 
     private Data data;
 
-    private static final Logger LOGGER = LogManager.getLogger(PersonRepositoryImpl.class);
+    private static final Logger LOGGER = LogManager.getLogger(DataRepositoryImpl.class);
 
     public void loadData(String FILEPATH) {
+        LOGGER.debug("Starting data loading from {}", FILEPATH);
         try {
             ObjectMapper mapper = new ObjectMapper();
             data = mapper.readValue(new File(FILEPATH), Data.class);
+            LOGGER.debug("Data successfully loaded");
         } catch (Exception e) {
             LOGGER.error("Fail to read the json file", e);
         }

@@ -1,6 +1,9 @@
 package com.openclassrooms.safetynetp5.service;
 
 import com.openclassrooms.safetynetp5.dto.*;
+import com.openclassrooms.safetynetp5.exceptions.MedicalRecordNotFoundException;
+import com.openclassrooms.safetynetp5.exceptions.PersonNotFoundException;
+import com.openclassrooms.safetynetp5.exceptions.ResourceNotFoundException;
 import com.openclassrooms.safetynetp5.model.Firestation;
 import com.openclassrooms.safetynetp5.model.MedicalRecord;
 import com.openclassrooms.safetynetp5.model.Person;
@@ -17,12 +20,10 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -58,6 +59,17 @@ public class PersonServiceTest {
         verify(personRepository).getAll();
 
     }
+
+    @Test
+    public void testGetAllPersons_whenNoRecords() {
+        when(personRepository.getAll()).thenReturn(Collections.emptyList());
+
+        assertThrows(ResourceNotFoundException.class, () -> {
+            personService.getAllPersons();
+        });
+
+        verify(personRepository).getAll();
+    }
     @Test
     public void testSavePerson() {
         Person mockPerson = new Person();
@@ -83,6 +95,20 @@ public class PersonServiceTest {
         verify(personRepository).delete(firstName, lastName);
 
     }
+
+    @Test
+    public void testDeletePerson_whenNoRecord_shouldThrowException() {
+        String firstName = "firstNameTest";
+        String lastName = "lastNameTest";
+
+        when(personRepository.delete(firstName, lastName)).thenReturn(Collections.emptyList());
+
+        assertThrows(PersonNotFoundException.class, () -> {
+            personService.deletePerson(firstName, lastName);
+        });
+
+        verify(personRepository).delete(firstName, lastName);
+    }
     @Test
     public void testUpdatePerson() {
 
@@ -94,6 +120,21 @@ public class PersonServiceTest {
         Person result = personService.updatePerson(mockPerson, firstName, lastName);
 
         assertEquals(mockPerson, result);
+        verify(personRepository).update(mockPerson, firstName, lastName);
+    }
+
+    @Test
+    public void testUpdatePerson_whenRecordNotFound() {
+        Person mockPerson = new Person();
+        String firstName = "firstNameTest";
+        String lastName = "lastNameTest";
+
+        when(personRepository.update(mockPerson, firstName, lastName)).thenReturn(null);
+
+        assertThrows(PersonNotFoundException.class, () -> {
+            personService.updatePerson(mockPerson, firstName, lastName);
+        });
+
         verify(personRepository).update(mockPerson, firstName, lastName);
     }
 
